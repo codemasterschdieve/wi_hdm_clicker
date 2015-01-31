@@ -163,7 +163,7 @@ public class LecturerForm extends VerticalPanel {
 		this.userTextBox.setText(shownLecturer.getUser());
 		this.passwortTextBox.setText(shownLecturer.getPassword());
 		this.firstnameTextBox.setText(shownLecturer.getFirstname());
-		this.nameTextBox.setText(shownLecturer.getFirstname());
+		this.nameTextBox.setText(shownLecturer.getLastname());
 	}
 
 	/**

@@ -7,6 +7,7 @@ import java.util.Vector;
 import de.hdm.clicker.server.db.*;
 import de.hdm.clicker.shared.Verwaltung;
 import de.hdm.clicker.shared.bo.*;
+import java.util.regex.*;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -81,12 +82,13 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	   * Referenzen auf den bereits instantiierten DatenbankMappern, der Businessobjekte 
 	   * mit der Datenbank abgleicht.
 	   */
-	public LecturerMapper lecturerMapper = LecturerMapper.lecturerMapper();
+	public TeacherMapper teacherMapper = TeacherMapper.teacherMapper();
 	public CategoryMapper categoryMapper = CategoryMapper.categoryMapper();
 	public QuestionMapper questionMapper = QuestionMapper.questionMapper();
 	public QuizMapper quizMapper = QuizMapper.quizMapper();
 	public ResultsMapper resultsMapper = ResultsMapper.resultsMapper();
 	public QuizPackageMapper quizPackageMapper = QuizPackageMapper.quizPackageMapper();
+	public LDAPMapper ldapmapper = LDAPMapper.ldapMapper();
 	
 	/**
 	 * Flag, welche angibt, ob sich der Admin bereits authentifiziert hat
@@ -96,12 +98,19 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	/**
 	 * Der aktuell angemeldete Lecturer
 	 */
-	private Teacher signedInLecturer = null;
+	private Teacher loginteacher = null;
+//	private Teacher loginteacher =null;
 	
 	/**
 	 * Der aktuell angemeldete Participant
 	 */
-	private String signedInParticipant = null;
+	private String loginstudent = null;
+//	private String loginstudent =null;
+	
+	/**
+	 * Der aktuell angemeldete User
+	 */
+	private User loginuser=null;
 	
 	TempDatabase tempDB = null;
 	DBConnection dbcon = new DBConnection();
@@ -252,7 +261,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 			throw new RuntimeException("Berechtigung nicht ausreichend");
 		}
 		
-		return lecturerMapper.findAll();
+		return teacherMapper.findAll();
 	}
 	
 	/**
@@ -265,10 +274,10 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public Vector<Teacher> auslesenLecturer(Teacher lecturer) throws RuntimeException {
-		if (isAdmin || signedInLecturer != null) {
+		if (isAdmin || loginteacher != null) {
 			Vector<Integer> vi = new Vector<Integer>();
 			vi.add(lecturer.getId());
-			return lecturerMapper.findByKey(vi);
+			return teacherMapper.findByKey(vi);
 		}
 		
 		throw new RuntimeException("Berechtigung nicht ausreichend");
@@ -284,10 +293,10 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht.
 	 */
 	public Teacher aendernLecturer(Teacher lecturer) throws RuntimeException {
-		if (isAdmin || signedInLecturer != null) {
-			Teacher editedLec = this.lecturerMapper.update(lecturer);
-			if (signedInLecturer != null) {
-				signedInLecturer = editedLec;
+		if (isAdmin || loginteacher != null) {
+			Teacher editedLec = this.teacherMapper.update(lecturer);
+			if (loginteacher != null) {
+				loginteacher = editedLec;
 			}
 			return editedLec;
 		}
@@ -309,7 +318,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 			throw new RuntimeException("Berechtigung nicht ausreichend");
 		}
 		
-		this.lecturerMapper.delete(lecturer);
+		this.teacherMapper.delete(lecturer);
 	}
 	
 	/**
@@ -335,7 +344,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 		newLecturer.setFirstname(firstName);
 		newLecturer.setLastname(name);
 		
-		return this.lecturerMapper.insertIntoDB(newLecturer);
+		return this.teacherMapper.insertIntoDB(newLecturer);
 		
 	}
 	
@@ -371,6 +380,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * ***********************************************************************************************
 	 */
 	
+	
 	/**
 	 * Methode um den Lecturer zu authentifizieren
 	 * 
@@ -380,11 +390,52 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * @throws	Beim prüfen des Usernamens und des Passworts kann es zur Unstimmigkeit kommen
 	 */
 	public boolean lecturerAuthenticate(String user, String password) throws RuntimeException {
-		signedInLecturer = this.lecturerMapper.findByLogin(user, password);
-		if (signedInLecturer == null) {
+		loginteacher = this.teacherMapper.findByLogin(user, password);
+		if (loginteacher == null) {
 			throw new RuntimeException("User oder Passwort nicht korrekt!");
 		}
 		return true;
+	}
+	
+	public int authenticateUser(String user,String password) throws RuntimeException {
+		loginuser= this.ldapmapper.findUserbyLogin(user, password);
+		if(loginuser==null)
+		{
+			adminAuthenticate(password);
+			return 0;
+		}
+		else
+		if(loginuser.getUsername().matches("[a-z]{2}[0-9]{3}"))
+		{
+			// Der aus der LDAP Schnittstelle ausgelesene User ist ein Student
+			
+			this.loginstudent = loginuser.getUsername();
+			return 1;
+			
+			
+		}
+		else
+		{
+			// Der aus der LDAP Schnittstelle ausgelesene User ist ein Lehrender
+			Teacher teacher = new Teacher();
+			teacher.setUser(loginuser.getUsername());
+			teacher.setFirstname(loginuser.getFirstname());
+			teacher.setLastname(loginuser.getLastname());
+			teacher.setPassword(loginuser.getPassword());
+			
+			Teacher ttemp= new Teacher();
+			ttemp= this.teacherMapper.findByLogin(user, password);
+			
+			if (ttemp==null)
+			{
+			this.teacherMapper.insertIntoDB(teacher);
+			this.loginteacher=teacher;
+			}
+			this.loginteacher=ttemp;
+			
+			return 2;
+		}
+	
 	}
 	
 	/**
@@ -395,8 +446,8 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 */
 	public Teacher getSignedLecturer() throws RuntimeException {
 		
-		if (signedInLecturer != null) {
-			return signedInLecturer;
+		if (loginteacher != null) {
+			return loginteacher;
 		}
 		else {
 			throw new RuntimeException("Es ist ein Fehler aufgetreten, bitte melden Sie sich erneut an.");
@@ -413,7 +464,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht.
 	 */
 	public Category aendernCategory(Category category) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			return this.categoryMapper.update(category);
 		}
 		else {
@@ -431,7 +482,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public Vector<Category> auslesenCategory(Category category) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			Vector<Integer> vi = new Vector<Integer>();
 			vi.add(category.getId());
 			return categoryMapper.findByKey(vi);
@@ -450,8 +501,8 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public Vector<Category> auslesenAlleCategoriesByLecturer() throws RuntimeException {
-		if (signedInLecturer != null) {
-			return categoryMapper.findAllByLecturer(this.signedInLecturer);
+		if (loginteacher != null) {
+			return categoryMapper.findAllByLecturer(this.loginteacher);
 		}
 		else {
 			throw new RuntimeException("Es ist ein Fehler aufgetreten, bitte melden Sie sich erneut an.");
@@ -467,7 +518,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public void loeschenCategory(Category category) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			//Prüfung ob noch aktive Questions der Category zugeorndet sind
 			Vector<Question> vq = this.questionMapper.findByCategory(category);
 			for(Question q : vq) {
@@ -496,11 +547,11 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			welche ebenfalls an den Client weitergereicht werden 
 	 */
 	public Category anlegenCategory(String description) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			
 			Category newCategory = new Category();
 			newCategory.setDescription(description);
-			newCategory.setTeacherid(this.signedInLecturer.getId());
+			newCategory.setTeacherid(this.loginteacher.getId());
 			
 			return this.categoryMapper.insertIntoDB(newCategory);
 		}
@@ -527,7 +578,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			welche ebenfalls an den Client weitergereicht werden 
 	 */
 	public Question anlegenQuestion(String body, String answer1, String answer2, String answer3, String answer4, int severity, int categoryID) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			
 			Question newQuestion = new Question();
 			newQuestion.setQuestionText(body);
@@ -557,7 +608,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht.
 	 */
 	public Question aendernQuestion(Question question) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			// Falls die Frage nun kein Bild mehr referenzieren soll, wird dieses gelöscht
 			Vector<Integer> vi = new Vector<Integer>();
 			vi.add(question.getId());
@@ -588,7 +639,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public void loeschenQuestion(Question question) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			
 			/*
 			 * Prüfung ob die Question einem Quiz (jüngste Version) zugeordnet ist,
@@ -634,7 +685,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public Vector<Question> auslesenAlleQuestionsByCategory(Category cat) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			return questionMapper.findByCategory(cat);
 		}
 		else {
@@ -651,7 +702,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public Vector<Question> auslesenAlleQuestionsByQuiz(Quiz quiz) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			return questionMapper.findByQuiz(quiz);
 		}
 		else {
@@ -669,7 +720,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public Vector<Question> auslesenAlleQuestionsByCategoryAndSeverity(Category cat, int severity) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			return questionMapper.findByCategoryAndSeverity(cat,severity);
 		}
 		else {
@@ -687,7 +738,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public Vector<Question> auslesenQuestion(Question question) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			Vector<Integer> vi = new Vector<Integer>();
 			vi.add(question.getId());
 			return questionMapper.findByKey(vi);
@@ -708,7 +759,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht.
 	 */
 	public Quiz aendernQuiz(Quiz quiz, Vector<Question> vq) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			
 			if (vq != null) {
 				quiz.setQuestionsCount(vq.size());
@@ -740,7 +791,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht.
 	 */
 	public Quiz startenQuiz(Quiz quiz) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			
 			return this.quizMapper.startUpdate(quiz);
 			
@@ -771,7 +822,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 */
 	public Quiz anlegenQuiz(String passwort, int buttonDuration, String description, int questionDuration, 
 			int startDate, int startTime, boolean active, boolean automatic, boolean random, Vector<Question> vq) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			
 			Quiz newQuiz = new Quiz();
 			newQuiz.setPassword(passwort);
@@ -783,7 +834,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 			newQuiz.setActive(active);
 			newQuiz.setActive(automatic);
 			newQuiz.setRandomOrder(random);
-			newQuiz.setTeacherId(signedInLecturer.getId());
+			newQuiz.setTeacherId(loginteacher.getId());
 			newQuiz.setVersion(1);
 			
 			if(vq != null) {
@@ -829,7 +880,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public Vector<Quiz> auslesenQuiz(Quiz quiz) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			Vector<Integer> vi = new Vector<Integer>();
 			vi.add(quiz.getId());
 			return quizMapper.findByKeyHV(vi);
@@ -848,7 +899,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public void loeschenQuiz(Quiz quiz) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			
 			this.quizMapper.delete(quiz);
 			loadActiveQuizzes();
@@ -873,8 +924,8 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public Vector<Quiz> auslesenAlleQuizzeByLecturer() throws RuntimeException {
-		if (signedInLecturer != null) {
-			return quizMapper.findByLecturer(signedInLecturer);
+		if (loginteacher != null) {
+			return quizMapper.findByLecturer(loginteacher);
 		}
 		else {
 			throw new RuntimeException("Es ist ein Fehler aufgetreten, bitte melden Sie sich erneut an.");
@@ -890,8 +941,8 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public Vector<Quiz> auslesenAlleQuizzeByLecturerAndActive() throws RuntimeException {
-		if (signedInLecturer != null) {
-			return quizMapper.findByLecturerAndActive(signedInLecturer);
+		if (loginteacher != null) {
+			return quizMapper.findByLecturerAndActive(loginteacher);
 		}
 		else {
 			throw new RuntimeException("Es ist ein Fehler aufgetreten, bitte melden Sie sich erneut an.");
@@ -907,8 +958,8 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public Vector<Integer> auslesenAlleQuizStartdatenByLecturer() throws RuntimeException {
-		if (signedInLecturer != null) {
-			return quizMapper.findDatesByLecturer(signedInLecturer);
+		if (loginteacher != null) {
+			return quizMapper.findDatesByLecturer(loginteacher);
 		}
 		else {
 			throw new RuntimeException("Es ist ein Fehler aufgetreten, bitte melden Sie sich erneut an.");
@@ -925,8 +976,8 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public Vector<Quiz> auslesenAlleQuizByLecturerAndStartdate(int date) throws RuntimeException {
-		if (signedInLecturer != null) {
-			return quizMapper.findByLecturerAndDate(signedInLecturer, date);
+		if (loginteacher != null) {
+			return quizMapper.findByLecturerAndDate(loginteacher, date);
 		}
 		else {
 			throw new RuntimeException("Es ist ein Fehler aufgetreten, bitte melden Sie sich erneut an.");
@@ -943,7 +994,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public Vector<InfoGraph> auslesenChartInfoByQuiz(Quiz quiz) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			return this.resultsMapper.findByQuizReport(quiz);
 		}
 		else {
@@ -962,7 +1013,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public String auslesenCSVDataByQuiz(Quiz quiz) throws RuntimeException {
-		if (signedInLecturer != null) {
+		if (loginteacher != null) {
 			return this.resultsMapper.getCSVStringByQuiz(quiz);
 		}
 		else {
@@ -989,7 +1040,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * @throws	Auftretende Fehler werden an den Client weitergereicht
 	 */
 	public void signInParticipant(String ptc) throws RuntimeException {
-		this.signedInParticipant = ptc;
+		this.loginstudent = ptc;
 	}
 	
 	/**
@@ -1019,7 +1070,7 @@ public class VerwaltungImpl extends RemoteServiceServlet implements Verwaltung {
 	 * 			weitergereicht. 
 	 */
 	public boolean erfassenResult(Result result) throws RuntimeException {
-		result.setHdmUser(this.signedInParticipant);
+		result.setHdmUser(this.loginstudent);
 		if (result.getAnswerNo() != 1) {
 			result.setSuccessed(false);
 			this.resultsMapper.insertIntoDB(result);

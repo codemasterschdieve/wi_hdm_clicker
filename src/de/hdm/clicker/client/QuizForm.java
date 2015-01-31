@@ -57,7 +57,7 @@ public class QuizForm extends VerticalPanel {
 	 * IntegerBox und Label zur Ausgabe bzw. Veranschaulichung
 	 * der ID des Quizzes
 	 */
-	Label idLabel = new Label("ID: ");
+	Label idLabel = new Label("Id: ");
 	IntegerBox idIntBox = new IntegerBox();
 	
 	/**
@@ -71,21 +71,21 @@ public class QuizForm extends VerticalPanel {
 	 * IntegerBox und Label zur Ein-, Ausgabe bzw. Veranschaulichung
 	 * der Bearbeitungszeit je Frage in Sekunden
 	 */
-	Label questionDurationLabel = new Label("Bearbeitungszeit in Sek: ");
+	Label questionDurationLabel = new Label("Bearbeitungszeit in s: ");
 	IntegerBox questionDurationIntBox = new IntegerBox();
 	
 	/**
 	 * IntegerBox und Label zur Ein-, Ausgabe bzw. Veranschaulichung
 	 * der Zeit die der Start-Button aktiv bleibt
 	 */
-	Label buttonDurationLabel = new Label("Button-Aktiv in Sek: ");
+	Label buttonDurationLabel = new Label("Zeitdauer aktiver Button in s: ");
 	IntegerBox buttonDurationIntBox = new IntegerBox();
 	
 	/**
 	 * TextBox und Label zur Ein-, Ausgabe bzw. Veranschaulichung
 	 * der Description des Quizzes
 	 */
-	Label descLabel = new Label("Beschreibung: ");
+	Label descLabel = new Label("Beschreibungstext: ");
 	TextBox descTextBox = new TextBox();
 
 	/**
@@ -105,7 +105,7 @@ public class QuizForm extends VerticalPanel {
 	 * IntegerBoxen und Label zur Ein-, Ausgabe bzw. Veranschaulichung
 	 * der Start-Zeit die der Start-Button aktiv bleibt
 	 */
-	Label startTimeLabel = new Label("Start-Zeit: ");
+	Label startTimeLabel = new Label("Start Zeitpunkt: ");
 	IntegerBox startHourIntBox = new IntegerBox();
 	Label colonLabel = new Label(" : ");
 	IntegerBox startMinutesIntBox = new IntegerBox();
@@ -113,19 +113,19 @@ public class QuizForm extends VerticalPanel {
 	/**
 	 * Checkbox zur Festlegung ob Quiz aktiv is oder nicht
 	 */
-	Label activeLabel = new Label("Aktiv: ");
+	Label activeLabel = new Label("Quiz Aktiv: ");
 	CheckBox activeCheckBox = new CheckBox();
 	
 	/**
 	 * Checkbox zur Festlegung ob Quiz automatisch Starten soll oder nicht
 	 */
-	Label automaticLabel = new Label("Automatischer Quiz-Start: ");
+	Label automaticLabel = new Label("Automatischer Start aktivieren: ");
 	CheckBox automaticCheckBox = new CheckBox();
 	
 	/**
 	 * Checkbox zur Festlegung ob Fragen in zufälliger Reihenfolge ablaufen
 	 */
-	Label randomLabel = new Label("Zufällige Reihenfolge: ");
+	Label randomLabel = new Label("Zufällige Reihenfolge aktivieren: ");
 	CheckBox randomCheckBox = new CheckBox();
 
 	/**
@@ -172,7 +172,7 @@ public class QuizForm extends VerticalPanel {
 	ListBox categoryListBox = new ListBox();
 	Vector<Category> categoryVectorLB = null;
 	
-	Label severityLabel = new Label("Schwierigkeit: ");
+	Label severityLabel = new Label("Schwierigkeitsgrad: ");
 	ListBox severityListBox = new ListBox();
 	
 	Label questionLabel = new Label("Frage: ");
@@ -214,43 +214,56 @@ public class QuizForm extends VerticalPanel {
 		grid.setWidget(1, 0, versionLabel);
 		
 		grid.setWidget(1, 1, versionIntBox);
+		idLabel.setVisible(false);
+		idIntBox.setVisible(false);
 		versionIntBox.setEnabled(false);
+		versionIntBox.setVisible(false);
+		versionLabel.setVisible(false);
 		
-		grid.setWidget(2, 0, questionDurationLabel);
-		grid.setWidget(2, 1, questionDurationIntBox);
-		grid.setWidget(3, 0, buttonDurationLabel);
-		grid.setWidget(3, 1, buttonDurationIntBox);
-		grid.setWidget(4, 0, descLabel);
-		grid.setWidget(4, 1, descTextBox);
-		grid.setWidget(5, 0, passwortLabel);
-		grid.setWidget(5, 1, passwortTextBox);
-		grid.setWidget(6, 0, startDateLabel);
-		grid.setWidget(6, 1, datepicker);
-		grid.setWidget(7, 0, startTimeLabel);
+		grid.setWidget(2, 0, descLabel);
+		grid.setWidget(2, 1, descTextBox);
+		grid.setWidget(3, 0, passwortLabel);
+		grid.setWidget(3, 1, passwortTextBox);
 		
+		grid.setWidget(4, 0, questionDurationLabel);
+		grid.setWidget(4, 1, questionDurationIntBox);
+		grid.setWidget(5, 0, buttonDurationLabel);
+		grid.setWidget(5, 1, buttonDurationIntBox);
+		
+		
+		
+		grid.setWidget(6, 0, activeLabel);
+		grid.setWidget(6, 1, activeCheckBox);
+		grid.setWidget(7, 0, automaticLabel);
+		grid.setWidget(7, 1, automaticCheckBox);
+		grid.setWidget(8, 0, randomLabel);
+		grid.setWidget(8, 1, randomCheckBox);
+		
+		
+		grid.setWidget(9, 0, startTimeLabel);
 		timeGrid.setWidget(0, 0, startHourIntBox);
 		timeGrid.setWidget(0, 1, colonLabel);
 		timeGrid.setWidget(0, 2, startMinutesIntBox);
 		
-		grid.setWidget(7, 1, timeGrid);
-		grid.setWidget(8, 0, activeLabel);
-		grid.setWidget(8, 1, activeCheckBox);
-		grid.setWidget(9, 0, automaticLabel);
-		grid.setWidget(9, 1, automaticCheckBox);
-		grid.setWidget(10, 0, randomLabel);
-		grid.setWidget(10, 1, randomCheckBox);
+		grid.setWidget(9, 1, timeGrid);
+		grid.setWidget(10, 0, startDateLabel);
+		grid.setWidget(10, 1, datepicker);
+		
+		
+		
+		
 				
 		leftVP.add(grid);
 		carrierHP.add(leftVP);
 		
-		questionGrid = new Grid(4,2);
-		questionGrid.setWidget(0, 0, categoryLabel);
-		questionGrid.setWidget(0, 1, categoryListBox);
-		questionGrid.setWidget(1, 0, severityLabel);
-		questionGrid.setWidget(1, 1, severityListBox);
-		questionGrid.setWidget(2, 0, questionLabel);
-		questionGrid.setWidget(2, 1, questionListBox);
-		questionGrid.setWidget(3, 1, hinzufuegenButton);
+		questionGrid = new Grid(7,2);
+		questionGrid.setWidget(2, 0, categoryLabel);
+		questionGrid.setWidget(2, 1, categoryListBox);
+		questionGrid.setWidget(3, 0, severityLabel);
+		questionGrid.setWidget(3, 1, severityListBox);
+		questionGrid.setWidget(4, 0, questionLabel);
+		questionGrid.setWidget(4, 1, questionListBox);
+		questionGrid.setWidget(6, 1, hinzufuegenButton);
 		rightVP.add(questionGrid);
 		
 		questionFlexTable = new FlexTable();
@@ -295,7 +308,7 @@ public class QuizForm extends VerticalPanel {
 					for (Question q : questionVector) {
 						if (q.getId() == questionVectorLB.elementAt(
 								questionListBox.getSelectedIndex()).getId()) {
-							Window.alert("Diese Frage wurde bereits hinzugefügt");
+							Window.alert("Diese Frage existiert bereits");
 							return;
 						}
 					}
@@ -370,6 +383,10 @@ public class QuizForm extends VerticalPanel {
 		speichernAnlegenButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				speichernAnlegenButton.setEnabled(false);
+				idLabel.setVisible(true);
+				idIntBox.setVisible(true);
+				versionIntBox.setVisible(true);
+				versionLabel.setVisible(true);
 				loeschenButton.setEnabled(false);
 
 				shownQuiz.setActive(activeCheckBox.getValue());
@@ -486,7 +503,7 @@ public class QuizForm extends VerticalPanel {
 						}
 	
 						public void onSuccess(Quiz result) {
-							Window.alert("Quiz wurde erfolgreich angelegt");
+							Window.alert("Das Anlegen des Quiz war erfolgreich");
 							ltvm.addQuiz(result);
 							speichernAnlegenButton.setEnabled(true);
 							clearForm();
@@ -502,7 +519,7 @@ public class QuizForm extends VerticalPanel {
 						}
 	
 						public void onSuccess(Quiz result) {
-							Window.alert("Quiz wurde erfolgreich angelegt");
+							Window.alert("Das Anlegen des Quiz war erfolgreich");
 							ltvm.addQuiz(result);
 							speichernAnlegenButton.setEnabled(true);
 							clearForm();

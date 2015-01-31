@@ -30,13 +30,18 @@ public class DBConnection {
 	 * @see StudiengangMapper.studiengangMapper()
 	 * @see ZeitslotMapper.zeitslotMapper()
 	 */
-	private static Vector<Connection> con = new Vector<Connection>();
-	private static int i = 0;
+	private Connection con = null;
 	
 	/**
 	 * Die URL, mit deren Hilfe die Datenbank angesprochen wird.
 	 */
+	//private static String url = "jdbc:mysql://dd33022.kasserver.com:3306/d01c2319";
 	private static String url = "jdbc:google:rdbms://hdm-clicker:db/hdm-clicker?user=root&";
+	/*
+	 *  Es kam in der Vergangenheit immer wieder vor, dass man die auskommentierte "URL" 
+	 *  für den Hosted-Modus verwenden musste (...Erklärungen haben wir vergeblich gesucht)
+	 */
+	//"jdbc:google:rdbms://titanium-spider-370:stundenplantool/stundenplantooltest" + "," +  "u"  + "," + "stundenplan.tool";
 	
 	/**
 	 * Diese statische Methode kann aufgrufen werden durch 
@@ -54,52 +59,89 @@ public class DBConnection {
 	 * 
 	 * @return DAS <code>DBConncetion</code>-Objekt.
 	 */
-	public static Connection connection() throws RuntimeException {
+	public Connection connection() {
+		// Wenn es bisher keine Conncetion zur DB gab, ... 
 		try {
-			if ( con.elementAt(i) == null || con.elementAt(i).isClosed() || con.elementAt(i).isValid(0)) {
+			if ( con == null || con.isClosed() ) {
 				try {
+					// Ersteinmal muss der passende DB-Treiber geladen werden
 					DriverManager.registerDriver(new AppEngineDriver());
-					
-					con.setElementAt(DriverManager.getConnection(url), i);
+					/*
+					 * Dann erst kann uns der DriverManager eine Verbindung mit den oben
+					 * in der Variable url angegebenen Verbindungsinformationen aufbauen.
+					 * 
+					 * Diese Verbindung wird dann in der statischen Variable con 
+					 * abgespeichert und fortan verwendet.
+					 */
+					con = DriverManager.getConnection(url);
+					//con = DriverManager.getConnection(url, "d01c2319", "hdm2014!XOXO");
 				} 
 				catch (SQLException e1) {
-					con.setElementAt(null, i);
-					throw new RuntimeException("Datenbankbankproblem con1: " + e1.getMessage());
+					con = null;
+					e1.printStackTrace();
 				}
 			}
 		}
 		catch (SQLException e1) {
 			con = null;
-			throw new RuntimeException("Datenbankbankproblem con2: " + e1.getMessage());
-		}
-		Connection c;
-		try {
-			c = con.elementAt(i);
-			i++;
-			if (con.size() <= i) {
-				i = 0;
-			}
-		} catch (Exception e) {
-			throw new RuntimeException("Datenbankbankproblem con3: " + e.getMessage());
+			e1.printStackTrace();
 		}
 		
-		return c;
+		// Zurückgegeben der Verbindung
+		return con;
 	}
 	
-	public static void openOneOfTenConnection() throws RuntimeException {
+	
+
+	
+	
+	
+	
+	/**
+	 * Diese statische Methode kann aufgrufen werden durch 
+	 * <code>DBConnection.closeConnection()</code>. Sie löst
+	 * eine bestehende Verbindung zur Datenbank auf.
+	 * 
+	 * @throws	RuntimeException - beim "kappen" der DB-
+	 * 			Verbindung kann ein Fehler entstehen,
+	 * 			welcher mittelbar an die aufrufende Methode
+	 * 			weitergeleitet wird
+	 */
+	public void closeConnection() throws RuntimeException {
 		try {
-			if (con.size() < 10) {
+			if (con != null && (!con.isClosed())) {
 				try {
-					DriverManager.registerDriver(new AppEngineDriver());
-					con.add(DriverManager.getConnection(url));
-				} 
-				catch (SQLException e1) {
+					con.close();
 					con = null;
-					throw new RuntimeException("Datenbankbankproblem oootc: " + e1.getMessage());
+				}
+				catch (SQLException e1) {
+					throw new RuntimeException("Fehler beim Trennen der DB-Verbindung aufgetreten: " + e1.getMessage());
 				}
 			}
-		} catch (Exception e) {
-			throw new RuntimeException("Datenbankbankproblem oootc2: " + e.getMessage());
+		}
+		catch (SQLException e1) {
+			throw new RuntimeException("Fehler beim Trennen der DB-Verbindung aufgetreten: " + e1.getMessage());
 		}
 	}
+
+
+public static void openOneOfTenConnection() throws RuntimeException {
+
+	Vector<Connection> con2 = new Vector<Connection>();
+	
+	try {
+		if (con2.size() < 10) {
+			try {
+				DriverManager.registerDriver(new AppEngineDriver());
+				con2.add(DriverManager.getConnection(url));
+			} 
+			catch (SQLException e1) {
+				con2 = null;
+				throw new RuntimeException("Datenbankbankproblem oootc: " + e1.getMessage());
+			}
+		}
+	} catch (Exception e) {
+		throw new RuntimeException("Datenbankbankproblem oootc2: " + e.getMessage());
+	}
+}
 }

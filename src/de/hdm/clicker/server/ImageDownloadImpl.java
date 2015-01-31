@@ -41,7 +41,8 @@ public class ImageDownloadImpl extends HttpServlet{
 	}
 	
 	public Blob selectBlob() {
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs = null;
 		
 		
@@ -59,6 +60,7 @@ public class ImageDownloadImpl extends HttpServlet{
 		catch (SQLException e1) {
 			throw new RuntimeException("Datenbankbankproblem: " + e1.getMessage());
 		}
+	//	db.closeConnection();
 		return blob;
 	}
 }

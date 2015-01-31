@@ -17,7 +17,7 @@ import de.hdm.clicker.shared.bo.*;
  * gelöscht werden können. Das Mapping ist bidirektional. D.h., Objekte können
  * in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
  * 
- * @see LecturerMapper
+ * @see TeacherMapper
  * @see CategoryMapper
  * @see QuestionMapper
  * @see ResultsMapper
@@ -89,7 +89,8 @@ public class QuizMapper {
 		ids.append(keys.elementAt(keys.size()-1));			
 			
 		//Einholen einer DB-Verbindung		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		Vector<Quiz> quizzes = new Vector<Quiz>();
 		try{
@@ -143,6 +144,7 @@ public class QuizMapper {
 			throw new RuntimeException("Datenbankbankproblem - quizm fbk: " + e1.getMessage());				
 		}
 		
+		db.closeConnection();
 		return quizzes;
 	}
 	
@@ -158,7 +160,8 @@ public class QuizMapper {
 	public Vector<Quiz> findByQuestion(Question question) throws RuntimeException {
 					
 		//Einholen einer DB-Verbindung		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		Vector<Quiz> quizzes = new Vector<Quiz>();
 		try{
@@ -212,6 +215,7 @@ public class QuizMapper {
 			throw new RuntimeException("Datenbankbankproblem - quizm fbk: " + e1.getMessage());				
 		}
 		
+		db.closeConnection();
 		return quizzes;
 	}
 	
@@ -224,7 +228,8 @@ public class QuizMapper {
 	 */	
 	public Vector<Quiz> findByLecturer(Teacher lec) throws RuntimeException {
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		Vector<Quiz> quizzes = new Vector<Quiz>();
 		
@@ -278,7 +283,7 @@ public class QuizMapper {
 			throw new RuntimeException("Datenbankbankproblem - quizm fbl: " + e1.getMessage());		
 		}
 		
-				
+		db.closeConnection();		
 		return quizzes;
 			
 	}
@@ -292,7 +297,8 @@ public class QuizMapper {
 	 */	
 	public Vector<Integer> findDatesByLecturer(Teacher lec) throws RuntimeException {
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		Vector<Integer> dates = new Vector<Integer>();
 		
@@ -312,7 +318,7 @@ public class QuizMapper {
 			throw new RuntimeException("Datenbankbankproblem - quizm fdbl: " + e1.getMessage());		
 		}
 		
-				
+		db.closeConnection();		
 		return dates;
 			
 	}
@@ -326,7 +332,8 @@ public class QuizMapper {
 	 */	
 	public Vector<Quiz> findByLecturerAndDate(Teacher lec, int date) throws RuntimeException {
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		Vector<Quiz> quizzes = new Vector<Quiz>();
 		
@@ -379,7 +386,7 @@ public class QuizMapper {
 			throw new RuntimeException("Datenbankbankproblem - quizm fblad: " + e1.getMessage());		
 		}
 		
-				
+		db.closeConnection();		
 		return quizzes;
 			
 	}
@@ -393,7 +400,8 @@ public class QuizMapper {
 	 */	
 	public Vector<Quiz> findByLecturerAndActive(Teacher lec) throws RuntimeException {
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		Vector<Quiz> quizzes = new Vector<Quiz>();
 		
@@ -447,7 +455,7 @@ public class QuizMapper {
 			throw new RuntimeException("Datenbankbankproblem - quizm fbla: " + e1.getMessage());		
 		}
 		
-				
+		db.closeConnection();		
 		return quizzes;
 			
 	}
@@ -464,7 +472,8 @@ public class QuizMapper {
 	 * 			die entstandene Exception wird an die aufrufende Methode weitergereicht
 	 */
 	public Quiz update(Quiz quiz, Vector<Question> vq) throws RuntimeException {
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		int active;
 		int automatic;
@@ -502,7 +511,7 @@ public class QuizMapper {
 			Statement stmt = con.createStatement();
 			String sql = "UPDATE Quiz SET password='"+quiz.getPassword()+"', buttonduration='"+quiz.getDurationButton()
 					+"', version='"+quiz.getVersion()+"', description='"+quiz.getDescription()+"', lecturerid='"+quiz.getTeacherId()
-					+"', questionduration='"+quiz.getDurationQuestion()+"', startdate='"+quiz.getStartingDate()+"', starttime='"+quiz.getStartingTime()
+					+"', questionduration='"+quiz.getDurationQuestion()+"', startdate='"+quiz.getStartingDate()+"', starttime='"+quiz.getStartingDate()
 					+"', active="+active+", automatic="+automatic+", random="+random+", started="+started+", questions="+quiz.getQuestionsCount()
 					+" WHERE id="+quiz.getId()+" AND version="+quiz.getVersion()+";";
 			stmt.executeUpdate(sql);
@@ -525,6 +534,7 @@ public class QuizMapper {
 			throw new RuntimeException("Datenbankbankproblem - quizm.update: " + e1.getMessage());
 		}
 		
+		db.closeConnection();
 		return quiz;
 	}
 	
@@ -538,7 +548,8 @@ public class QuizMapper {
 	 * 			die entstandene Exception wird an die aufrufende Methode weitergereicht
 	 */
 	public Quiz startUpdate(Quiz quiz) throws RuntimeException {
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		int active;
 		int automatic;
@@ -576,7 +587,7 @@ public class QuizMapper {
 			Statement stmt = con.createStatement();
 			String sql = "UPDATE Quiz SET password='"+quiz.getPassword()+"', buttonduration='"+quiz.getDurationButton()
 					+"', version='"+quiz.getVersion()+"', description='"+quiz.getDescription()+"', lecturerid='"+quiz.getTeacherId()
-					+"', questionduration='"+quiz.getDurationQuestion()+"', startdate='"+quiz.getStartingDate()+"', starttime='"+quiz.getStartingTime()
+					+"', questionduration='"+quiz.getDurationQuestion()+"', startdate='"+quiz.getStartingDate()+"', starttime='"+quiz.getStartingDate()
 					+"', active="+active+", automatic="+automatic+", random="+random+", started="+started+", questions="+quiz.getQuestionsCount()
 					+" WHERE id="+quiz.getId()+" AND version="+quiz.getVersion()+";";
 			stmt.executeUpdate(sql);
@@ -586,6 +597,7 @@ public class QuizMapper {
 			throw new RuntimeException("Datenbankbankproblem - quizm.startupdate: " + e1.getMessage());
 		}
 		
+		db.closeConnection();
 		return quiz;
 	}
 	
@@ -600,7 +612,8 @@ public class QuizMapper {
 	
 	
 	public Quiz firstInsertIntoDB(Quiz quiz, Vector<Question> vq) throws RuntimeException {
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		
 		int active;
@@ -634,7 +647,7 @@ public class QuizMapper {
 			
 			String sql = "INSERT INTO Quiz (`password`, `buttonduration`, `version`, `description`, `lecturerid`, `questionduration`, `startdate`, `starttime`, `active`, `automatic`, `random`, `started`, `questions`) "
 					+ "VALUES ('"+quiz.getPassword()+"', '"+quiz.getDurationButton()+"', '"+quiz.getVersion()+1+"', '"+quiz.getDescription()+"', '"
-					+quiz.getTeacherId()+"', '"+quiz.getDurationQuestion()+"', "+quiz.getStartingDate()+", "+quiz.getStartingTime()+", "+active+", "+automatic+", "+random+", "+started+", "+quiz.getQuestionsCount()+");";
+					+quiz.getTeacherId()+"', '"+quiz.getDurationQuestion()+"', "+quiz.getStartingDate()+", "+quiz.getStartingDate()+", "+active+", "+automatic+", "+random+", "+started+", "+quiz.getQuestionsCount()+");";
 			stmt.executeUpdate(sql);
 			
 			// Auslesen der nach einfügen eines neuen Lecturers in DB entstandenen "größten" ID
@@ -661,11 +674,13 @@ public class QuizMapper {
 			throw new RuntimeException("Datenbankbankproblem - quizm firstinsert: " + e1.getMessage());
 		}
 		
+		db.closeConnection();
 		return quiz;
 	}
 	
 	public Quiz insertIntoDB(Quiz quiz) throws RuntimeException {
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		int newVersion = 0;
 		int active;
@@ -707,7 +722,7 @@ public class QuizMapper {
 			
 			String sql = "INSERT INTO Quiz (`id`, `password`, `buttonduration`, `version`, `description`, `lecturerid`, `questionduration`, `startdate`, `starttime`, `active`, `automatic`, `random`, `started`, `questions`) "
 					+ "VALUES ("+quiz.getId()+", '"+quiz.getPassword()+"', '"+quiz.getDurationButton()+"', '"+newVersion+"', '"+quiz.getDescription()+"', '"
-					+quiz.getTeacherId()+"', '"+quiz.getDurationQuestion()+"', "+quiz.getStartingDate()+", "+quiz.getStartingTime()+", "+active+", "+automatic+", "+random+", "+started+", "+quiz.getQuestionsCount()+");";
+					+quiz.getTeacherId()+"', '"+quiz.getDurationQuestion()+"', "+quiz.getStartingDate()+", "+quiz.getStartingDate()+", "+active+", "+automatic+", "+random+", "+started+", "+quiz.getQuestionsCount()+");";
 			stmt.executeUpdate(sql);
 			
 			
@@ -743,6 +758,7 @@ public class QuizMapper {
 		}
 		
 		quiz.setVersion(quiz.getVersion() + 1);
+		db.closeConnection();
 		return quiz;
 	}
 	
@@ -755,7 +771,8 @@ public class QuizMapper {
 	 */	
 	public Vector<Quiz> findAll() throws RuntimeException {
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		Vector<Quiz> quizzes = new Vector<Quiz>();
 		
@@ -808,7 +825,7 @@ public class QuizMapper {
 			throw new RuntimeException("Datenbankbankproblem - quizm fa: " + e1.getMessage());		
 		}
 		
-				
+		db.closeConnection();		
 		return quizzes;
 			
 	}
@@ -822,7 +839,8 @@ public class QuizMapper {
 	 */	
 	public Vector<Quiz> findAllActive() throws RuntimeException {
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		Vector<Quiz> quizzes = new Vector<Quiz>();
 		
@@ -876,7 +894,7 @@ public class QuizMapper {
 			throw new RuntimeException("Datenbankbankproblem - quizm faa: " + e1.getMessage());		
 		}
 		
-				
+		db.closeConnection();		
 		return quizzes;
 			
 	}
@@ -890,7 +908,8 @@ public class QuizMapper {
 	 */	
 	public Vector<Quiz> findAllStarted() throws RuntimeException {
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		Vector<Quiz> quizzes = new Vector<Quiz>();
 		
@@ -944,7 +963,7 @@ public class QuizMapper {
 			throw new RuntimeException("Datenbankbankproblem - quizm fas: " + e1.getMessage());		
 		}
 		
-				
+		db.closeConnection();		
 		return quizzes;
 			
 	}
@@ -958,7 +977,8 @@ public class QuizMapper {
 	 */	
 	public Vector<Quiz> findAllActiveAndAuto() throws RuntimeException {
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		Vector<Quiz> quizzes = new Vector<Quiz>();
 		
@@ -1012,7 +1032,7 @@ public class QuizMapper {
 			throw new RuntimeException("Datenbankbankproblem - quizm faaa: " + e1.getMessage());		
 		}
 		
-				
+		db.closeConnection();		
 		return quizzes;
 			
 	}
@@ -1031,7 +1051,8 @@ public class QuizMapper {
 		 */
 		
 		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		try {
 			Statement stmt = con.createStatement();
 			
@@ -1049,7 +1070,7 @@ public class QuizMapper {
 		catch (SQLException e1) {
 			throw new RuntimeException("Datenbankbankproblem - quizm.delete: " + e1.getMessage());
 		}
-		
+		db.closeConnection();
 	}
 	
 

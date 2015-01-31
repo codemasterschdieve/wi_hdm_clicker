@@ -19,7 +19,7 @@ import de.hdm.clicker.shared.bo.*;
 
 /**
  * Diese Klasse stellt die zur Auswahl aktiver Quizze notwendige
- * grafische BenutzeroberflÃ¤che bereit
+ * grafische Benutzeroberfläche bereit
  * 
  * @author Roth, Zimmermann, Zanella
  * @version 1.0
@@ -28,7 +28,7 @@ import de.hdm.clicker.shared.bo.*;
 public class ChooseQuizFormMobile extends ScrollPanel {
 
 	/**
-	 * Referenz auf das Proxy-Objekt um mit dem Server kommunizieren zu kÃ¶nnen
+	 * Referenz auf das Proxy-Objekt um mit dem Server kommunizieren zu können
 	 */
 	VerwaltungAsync verwaltung = null;
 	
@@ -48,7 +48,7 @@ public class ChooseQuizFormMobile extends ScrollPanel {
 	Vector<Quiz> quizVector = null;
 	
 	/**
-	 * Container welche alle Labels und ZÃ¤hler beinhalten die einen Quiz-Countdown darstellen
+	 * Container welche alle Labels und Zähler beinhalten die einen Quiz-Countdown darstellen
 	 */
 	Vector<Label> labelVector = null;
 	Vector<Integer> integerVector = null;
@@ -66,18 +66,18 @@ public class ChooseQuizFormMobile extends ScrollPanel {
 	int today = 0;
 	
 	/**
-	 * Container fÃ¼r alle Labels und ZÃ¤hler fÃ¼r den Start-Button-Countdown
+	 * Container für alle Labels und Zähler für den Start-Button-Countdown
 	 */
 	Vector<Label> labelButtonVector = new Vector<Label>();
 	
 	/**
-	 * Container fÃ¼r alle StartButtons
+	 * Container für alle StartButtons
 	 */
 	Vector<Button> buttonVector = new Vector<Button>();
 	int buttonPointer = 0;
 	
 	/**
-	 * Counter fÃ¼r die automatische Aktualisierung
+	 * Counter für die automatische Aktualisierung
 	 */
 	long timeCount = 0;
 	
@@ -87,7 +87,7 @@ public class ChooseQuizFormMobile extends ScrollPanel {
 	boolean reqAnswered = true;
 		
 	/**
-	 * Pointer auf das gwÃ¤hlte Quiz
+	 * Pointer auf das gwählte Quiz
 	 */
 	int quizPos;
 	
@@ -98,7 +98,7 @@ public class ChooseQuizFormMobile extends ScrollPanel {
 	
 	/**
 	 * Komstruktor der alle notwendigen Widgets initialisiert und anordnet,
-	 * so dass das Objekt fÃ¼r weitere Konfigurationen bereit ist
+	 * so dass das Objekt für weitere Konfigurationen bereit ist
 	 * 
 	 * @param	verwaltungA - Referenz auf ein Proxy-Objekt. 
 	 */	
@@ -172,7 +172,7 @@ public class ChooseQuizFormMobile extends ScrollPanel {
 	}
 	
 	/**
-	 * Methode um den FlexTable mit den aktiven Quizzen zu befÃ¼llen
+	 * Methode um den FlexTable mit den aktiven Quizzen zu befüllen
 	 */
 	public void quizzeAnzeigen() {
 		quizFlexTable.clear();
@@ -180,7 +180,7 @@ public class ChooseQuizFormMobile extends ScrollPanel {
 		
 		if ((quizVector != null)	&& (quizVector.size() > 0)) {
 			
-			// FÃ¼r jedes Quiz...
+			// Für jedes Quiz...
 			for (Quiz q : quizVector) {
 				final int row = buttonPointer;
 				//...wird im FlexPanel ein Eintrag gesetzt und...

@@ -14,7 +14,7 @@ import de.hdm.clicker.shared.bo.*;
  * in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
  * 
  * @see QuizMapper
- * @see LecturerMapper
+ * @see TeacherMapper
  * @see QuestionMapper
  * @see ResultsMapper
  * 
@@ -74,7 +74,8 @@ public class ResultsMapper {
 	public Vector<Result> findByQuiz(int quizID, int quizVersion) throws RuntimeException {
 					
 		//Einholen einer DB-Verbindung		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		Vector<Result> results = new Vector<Result>();
 		try{
@@ -110,6 +111,7 @@ public class ResultsMapper {
 			throw new RuntimeException("Datenbankbankproblem - rm fbk: " + e1.getMessage());				
 		}
 		
+		db.closeConnection();
 		return results;
 	}
 	
@@ -124,7 +126,8 @@ public class ResultsMapper {
 	public Vector<InfoGraph> findByQuizReport(Quiz quiz) throws RuntimeException {
 					
 		//Einholen einer DB-Verbindung		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		Vector<InfoGraph> cis = new Vector<InfoGraph>();
 		try{
@@ -191,6 +194,7 @@ public class ResultsMapper {
 			throw new RuntimeException("Datenbankbankproblem - rm fbk: " + e1.getMessage());				
 		}
 		
+		db.closeConnection();
 		return cis;
 	}
 	
@@ -206,7 +210,8 @@ public class ResultsMapper {
 	public int countByQuestion(Question question) throws RuntimeException {
 					
 		//Einholen einer DB-Verbindung		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		int anzahl = 0;
 		try{
@@ -225,6 +230,7 @@ public class ResultsMapper {
 			throw new RuntimeException("Datenbankbankproblem - rm cbq: " + e1.getMessage());				
 		}
 		
+		db.closeConnection();
 		return anzahl;
 	}
 	
@@ -253,7 +259,8 @@ public class ResultsMapper {
 		}
 		
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 						
 		try{
 			// Ausführung des SQL-Querys	
@@ -270,6 +277,7 @@ public class ResultsMapper {
 			throw new RuntimeException("Datenbankbankproblem - rm.insert: " + e1.getMessage());
 		}
 		
+		db.closeConnection();
 		return result;
 	}
 	
@@ -282,7 +290,8 @@ public class ResultsMapper {
 	 */
 	public Vector<Boolean> insertMultipleIntoDB(Vector<Result> vr) throws RuntimeException {
 		Vector<Boolean> vb = new Vector<Boolean>();
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		String sql = null;
 		
 		int answered;
@@ -347,6 +356,7 @@ public class ResultsMapper {
 			throw new RuntimeException("Datenbankbankproblem - resultm.insertmultiple: " + e1.getMessage());
 		}
 		
+		db.closeConnection();
 		return vb;
 	}
 	
@@ -359,7 +369,8 @@ public class ResultsMapper {
 	 */	
 	public Vector<Result> findAll() throws RuntimeException {
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		Vector<Result> results = new Vector<Result>();
 		
@@ -395,7 +406,7 @@ public class ResultsMapper {
 			throw new RuntimeException("Datenbankbankproblem - rm fa: " + e1.getMessage());		
 		}
 		
-				
+		db.closeConnection();		
 		return results;
 			
 	}
@@ -410,7 +421,8 @@ public class ResultsMapper {
 	 */	
 	public String getCSVStringByQuiz(Quiz quiz) throws RuntimeException {
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		StringBuffer sb = new StringBuffer();
 		
@@ -449,7 +461,7 @@ public class ResultsMapper {
 			throw new RuntimeException("Datenbankbankproblem - rm fa: " + e1.getMessage());		
 		}
 		
-				
+		db.closeConnection();		
 		return sb.toString();
 			
 	}
@@ -468,7 +480,8 @@ public class ResultsMapper {
 		 * und zur Nachprüfung vorgehalten werden sollten
 		 */
 		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		try {
 			Statement stmt = con.createStatement();
 									
@@ -479,7 +492,7 @@ public class ResultsMapper {
 		catch (SQLException e1) {
 			throw new RuntimeException("Datenbankbankproblem - rm.delete: " + e1.getMessage());
 		}
-		
+		db.closeConnection();
 	}
 	
 

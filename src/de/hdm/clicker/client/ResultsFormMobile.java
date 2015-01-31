@@ -11,9 +11,9 @@ public class ResultsFormMobile extends FlexPanel {
 	Clicker clicker = null;
 
 	public ResultsFormMobile(int wrongs, int corrects) {
-		this.add(new Label("Richtige Antworten: " + corrects));
+		this.add(new Label("Korrekte Antworten: " + corrects));
 		this.add(new Label("Falsche Antworten: " + wrongs));
-		Button button = new Button("zurück zur Quizübersicht");
+		Button button = new Button("Zur Quizuebersicht navigieren");
 		button.addTapHandler(new TapHandler() {
 
 			@Override

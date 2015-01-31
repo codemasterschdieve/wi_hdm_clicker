@@ -62,32 +62,32 @@ public class QuestionForm extends VerticalPanel {
 	/**
 	 * Question Body
 	 */
-	Label questionLabel = new Label("Frage: ");
+	Label questionLabel = new Label("Fragentext: ");
 	TextArea questionTextArea = new TextArea();
 	
 	/**
 	 * Answers
 	 */
-	Label answer1Label = new Label("1. Antwort \"richtig\": ");
+	Label answer1Label = new Label("1. Antwortmoeglichkeit (richtige Antwort): ");
 	TextArea answer1TextArea = new TextArea();
-	Label answer2Label = new Label("2. Antwort \"falsch\": ");
+	Label answer2Label = new Label("2. Antwortmoeglichkeit (falsche Antwort): ");
 	TextArea answer2TextArea = new TextArea();
-	Label answer3Label = new Label("3. Antwort \"falsch\" (optional): ");
+	Label answer3Label = new Label("3. Antwortmoeglichkeit (optionale Antwort): ");
 	TextArea answer3TextArea = new TextArea();
-	Label answer4Label = new Label("4. Antwort \"falsch\" (optional): ");
+	Label answer4Label = new Label("4. Antwortmoeglichkeit (optionale Antwort): ");
 	TextArea answer4TextArea = new TextArea();
 	
 	/**
 	 * Image
 	 */
-	Label imageLabel = new Label("Bild (optional): ");
+	Label imageLabel = new Label("Optionaler Bild Upload: ");
 	ImageUploadComposite uploadComposite = null;
 	ImageDownloadComposite downloadComposite = null;
 	
 	/**
 	 * Severity
 	 */
-	Label severityLabel = new Label("Schwierigkeit: ");
+	Label severityLabel = new Label("Schwierigkeitsgrad: ");
 	ListBox severityListBox = new ListBox();
 	
 	/**
@@ -363,7 +363,7 @@ public class QuestionForm extends VerticalPanel {
 				speichernAnlegenButton.setEnabled(false);
 
 				verwaltung.anlegenQuestion(questionTextArea.getText(), answer1TextArea.getText(), answer2TextArea.getText(), answer3TextArea.getText(), 
-						answer4TextArea.getText(), severityListBox.getSelectedIndex(), cVector.elementAt(categoryListBox.getSelectedIndex()).getId(), 
+						answer4TextArea.getText(), severityListBox.getSelectedIndex() +1, cVector.elementAt(categoryListBox.getSelectedIndex()).getId(), 
 						new AsyncCallback<Question>() {
 					public void onFailure(Throwable caught) {
 						Window.alert(caught.getMessage());

@@ -66,7 +66,8 @@ public class QuizPackageMapper {
 	public QuizPackage findByQuiz(Quiz quiz) throws RuntimeException {
 					
 		//Einholen einer DB-Verbindung		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		QuizPackage qpv = null;
 		Hashtable<Integer, Question> questions = new Hashtable<Integer, Question>();
@@ -157,6 +158,7 @@ public class QuizPackageMapper {
 			throw new RuntimeException("Datenbankbankproblem - quizm fbk: " + e1.getMessage());				
 		}
 		
+		db.closeConnection();
 		return qpv;
 	}
 	

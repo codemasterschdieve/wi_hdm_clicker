@@ -14,7 +14,7 @@ import de.hdm.clicker.shared.bo.*;
  * in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
  * 
  * @see CategoryMapper
- * @see LecturerMapper
+ * @see TeacherMapper
  * @see QuestionMapper
  * @see ResultsMapper
  * 
@@ -85,7 +85,8 @@ public class QuestionMapper {
 		ids.append(keys.elementAt(keys.size()-1));			
 			
 		//Einholen einer DB-Verbindung		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		Vector<Question> questions = new Vector<Question>();
 		try{
@@ -124,6 +125,7 @@ public class QuestionMapper {
 			throw new RuntimeException("Datenbankbankproblem - qm fbk: " + e1.getMessage());				
 		}
 		
+		db.closeConnection();
 		return questions;
 	}
 	
@@ -139,7 +141,8 @@ public class QuestionMapper {
 	public Vector<Question> findByCategory(Category cat) throws RuntimeException {
 			
 		//Einholen einer DB-Verbindung		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		Vector<Question> questions = new Vector<Question>();
 		try{
@@ -178,6 +181,7 @@ public class QuestionMapper {
 			throw new RuntimeException("Datenbankbankproblem - qm fbk: " + e1.getMessage());				
 		}
 		
+		db.closeConnection();
 		return questions;
 	}
 	
@@ -193,7 +197,8 @@ public class QuestionMapper {
 	public Vector<Question> findByCategoryAndSeverity(Category cat, int severity) throws RuntimeException {
 			
 		//Einholen einer DB-Verbindung		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		Vector<Question> questions = new Vector<Question>();
 		try{
@@ -232,6 +237,7 @@ public class QuestionMapper {
 			throw new RuntimeException("Datenbankbankproblem - qm fbk: " + e1.getMessage());				
 		}
 		
+		db.closeConnection();
 		return questions;
 	}
 	
@@ -247,7 +253,8 @@ public class QuestionMapper {
 	public Vector<Question> findByQuiz(Quiz quiz) throws RuntimeException {
 			
 		//Einholen einer DB-Verbindung		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		Vector<Question> questions = new Vector<Question>();
 		try{
@@ -287,6 +294,7 @@ public class QuestionMapper {
 			throw new RuntimeException("Datenbankbankproblem - qm fbqz: " + e1.getMessage());				
 		}
 		
+		db.closeConnection();
 		return questions;
 	}
 	
@@ -316,7 +324,8 @@ public class QuestionMapper {
 		}
 		
 		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		// Aktualisierung der Question-Entität in der DB		
 		try{
@@ -333,6 +342,7 @@ public class QuestionMapper {
 			throw new RuntimeException("Datenbankbankproblem - cm.update: " + e1.getMessage());
 		}
 		
+		db.closeConnection();
 		return question;
 	}
 	
@@ -360,7 +370,8 @@ public class QuestionMapper {
 			active = 0;
 		}
 		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 						
 		try{
@@ -387,6 +398,7 @@ public class QuestionMapper {
 			throw new RuntimeException("Datenbankbankproblem - qm.insert: " + e1.getMessage());
 		}
 		
+		db.closeConnection();
 		return question;
 	}
 	
@@ -399,7 +411,8 @@ public class QuestionMapper {
 	 */	
 	public Vector<Question> findAllActives() throws RuntimeException {
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		Vector<Question> questions = new Vector<Question>();
 		
@@ -438,7 +451,7 @@ public class QuestionMapper {
 			throw new RuntimeException("Datenbankbankproblem - cm fa: " + e1.getMessage());		
 		}
 		
-				
+		db.closeConnection();		
 		return questions;
 			
 	}
@@ -458,7 +471,8 @@ public class QuestionMapper {
 		 */
 		
 		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		try {
 			Statement stmt = con.createStatement();
 			
@@ -476,7 +490,7 @@ public class QuestionMapper {
 		catch (SQLException e1) {
 			throw new RuntimeException("Datenbankbankproblem - qm.delete: " + e1.getMessage());
 		}
-		
+		db.closeConnection();
 	}
 	
 	/**
@@ -502,7 +516,8 @@ public class QuestionMapper {
 		ids.append(keys.elementAt(keys.size()-1));			
 			
 		//Einholen einer DB-Verbindung		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		Vector<Blob> images = new Vector<Blob>();
 		try{
@@ -523,6 +538,7 @@ public class QuestionMapper {
 			throw new RuntimeException("Datenbankbankproblem - qm fbkI: " + e1.getMessage());				
 		}
 		
+		db.closeConnection();
 		return images;
 	}
 	
@@ -541,7 +557,8 @@ public class QuestionMapper {
 		 */
 		
 		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		try {
 			Statement stmt = con.createStatement();
 			
@@ -559,7 +576,7 @@ public class QuestionMapper {
 		catch (SQLException e1) {
 			throw new RuntimeException("Datenbankbankproblem - qm.deleteImage: " + e1.getMessage());
 		}
-		
+		db.closeConnection();
 	}
 	
 

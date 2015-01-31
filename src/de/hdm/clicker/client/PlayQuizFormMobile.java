@@ -61,6 +61,11 @@ public class PlayQuizFormMobile extends ScrollPanel {
 	 */
 	Vector<Button> buttonVector = null;
 	
+	/**
+	 * Butonpointer
+	 */
+	int buttonpointer = 0;
+	
 	
 	/**
 	 * CarrierPanel
@@ -149,6 +154,9 @@ public class PlayQuizFormMobile extends ScrollPanel {
 		addCountDownLBL();
 			
 		this.add(carrierPanel);
+		
+
+		this.setScrollingEnabledY(true);
 	}
 	
 	public void addCountDownLBL() {
@@ -167,6 +175,7 @@ public class PlayQuizFormMobile extends ScrollPanel {
 		carrierPanel.add(skipButton);
 		carrierPanel.add(img);
 		carrierPanel.add(questionLabel);
+		
 	}
 	
 	public void startQuiz() {
@@ -367,8 +376,9 @@ public class PlayQuizFormMobile extends ScrollPanel {
 		}
 		
 		buttonVector = new Vector<Button>();
-		for (Integer bo : bOrder) {
-			switch (bo) {
+		for (int i = 0; i < bOrder.size(); i++) {
+			buttonpointer = i;
+			switch (bOrder.elementAt(i)) {
 				case 0:
 					buttonVector.add(createButton(questionVector.elementAt(qOrder.elementAt(qPointer)).getAnswer1Text()));
 					carrierPanel.add(buttonVector.elementAt(buttonVector.size()-1));
@@ -401,13 +411,16 @@ public class PlayQuizFormMobile extends ScrollPanel {
 	public Button createButton(String btxt) {
 		Button newButton = new Button(btxt);
 		newButton.addTapHandler(new TapHandler() {
+			
+			int temp = buttonpointer;
+			
 			public void onTap(TapEvent event) {
 				
 				cd = new ConfirmDialog("Sicher?","", new ConfirmDialog.ConfirmCallback() {
 
 					@Override
 					public void onOk() {
-						final int rowIndex = buttonVector.size();
+						final int rowIndex = temp;
 						createResult(rowIndex);
 						nextQuestion();
 						

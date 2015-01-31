@@ -340,7 +340,7 @@ public class CategoryForm extends VerticalPanel {
 	 * Question-Liste zurückzukehren
 	 */
 	public void setZurueckButton() {
-		zurueckButton = new Button("Zurück");
+		zurueckButton = new Button("Zur�ck zur Liste");
 		zurueckButton.addClickHandler(new ClickHandler() {
 
 			@Override
@@ -404,7 +404,7 @@ public class CategoryForm extends VerticalPanel {
 					}
 
 					public void onSuccess(Category result) {
-						Window.alert("Kategorie wurde erfolgreich angelegt");
+						Window.alert("Das Anlegen der Kategorie war erfolgreich");
 						ltvm.addCategory(result);
 						speichernAnlegenButton.setEnabled(true);
 						clearForm();

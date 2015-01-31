@@ -21,7 +21,7 @@ import de.hdm.clicker.shared.bo.*;
  * @author Zimmermann, Roth, Zanella
  * @version 1.0
  */
-public class LecturerMapper {
+public class TeacherMapper {
 	
 	/**
 	 * Die Klasse LecturerMapper wird nur einmal instantiiert. Man spricht hierbei
@@ -31,14 +31,14 @@ public class LecturerMapper {
 	 * sämtliche eventuellen Instanzen dieser Klasse vorhanden. Sie speichert die
 	 * einzige Instanz dieser Klasse.
 	 */
-	private static LecturerMapper lecturerMapper = null;
+	private static TeacherMapper teacherMapper = null;
 	
 	/**
 	 * Geschützter Konstruktor - verhindert die Möglichkeit, mit new neue
 	 * Instanzen dieser Klasse zu erzeugen.
 	 * 
 	 */
-	protected LecturerMapper(){
+	protected TeacherMapper(){
 		
 	}
 	
@@ -54,12 +54,12 @@ public class LecturerMapper {
 	 * 
 	 * @return DAS <code>LecturerMapper</code>-Objekt.
 	 */
-	public static LecturerMapper lecturerMapper() {
-	    if (lecturerMapper == null) {
-	      lecturerMapper = new LecturerMapper();
+	public static TeacherMapper teacherMapper() {
+	    if (teacherMapper == null) {
+	      teacherMapper = new TeacherMapper();
 	    }
 
-	    return lecturerMapper;
+	    return teacherMapper;
 	   }
 	
 	/**
@@ -84,14 +84,15 @@ public class LecturerMapper {
 			
 		ids.append(keys.elementAt(keys.size()-1));			
 			
-		//Einholen einer DB-Verbindung		
-		Connection con = DBConnection.connection();
+		//Einholen einer DB-Verbindung
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		Vector<Teacher> lecturers = new Vector<Teacher>();
 		try{
 			// Ausführung des SQL-Querys
 			Statement stmt = con.createStatement();
-			String sql = "SELECT * FROM Lecturer WHERE id IN (" + ids.toString() + ") ORDER BY name";
+			String sql = "SELECT * FROM Teacher WHERE id IN (" + ids.toString() + ") ORDER BY name";
 			rs = stmt.executeQuery(sql);
 			
 			// Erstellung des "Lecturer-Vectors"
@@ -110,6 +111,7 @@ public class LecturerMapper {
 			throw new RuntimeException("Datenbankbankproblem - dm fbk: " + e1.getMessage());				
 		}
 		
+		db.closeConnection();
 		return lecturers;
 	}
 	
@@ -125,13 +127,14 @@ public class LecturerMapper {
 	public Teacher findByLogin(String user, String password) throws RuntimeException {
 					
 		//Einholen einer DB-Verbindung		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		Teacher lecturer = null;
 		try{
 			// Ausführung des SQL-Querys
 			Statement stmt = con.createStatement();
-			String sql = "SELECT * FROM Lecturer WHERE user = '"+user+"' and password = '"+password+"'";
+			String sql = "SELECT * FROM Teacher WHERE user = '"+user+"' and password = '"+password+"'";
 			rs = stmt.executeQuery(sql);
 			
 			// Erstellung des "Lecturer-Vectors"
@@ -149,6 +152,7 @@ public class LecturerMapper {
 			throw new RuntimeException("Datenbankbankproblem - dm fbk: " + e1.getMessage());				
 		}
 		
+		db.closeConnection();
 		return lecturer;
 	}
 	
@@ -161,13 +165,14 @@ public class LecturerMapper {
 	 * 			die entstandene Exception wird an die aufrufende Methode weitergereicht
 	 */
 	public Teacher update(Teacher lecturer) throws RuntimeException {
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		// Aktualisierung der Dozent-Entität in der DB		
 		try{
 			// Ausführung des SQL-Querys
 			Statement stmt = con.createStatement();
-			String sql = "UPDATE Lecturer SET user='"+lecturer.getUser()+"', password='"+lecturer.getPassword()+"', firstname='"+lecturer.getFirstname()+"', name='"+lecturer.getLastname()+"' WHERE id="+lecturer.getId()+";";
+			String sql = "UPDATE Teacher SET user='"+lecturer.getUser()+"', password='"+lecturer.getPassword()+"', firstname='"+lecturer.getFirstname()+"', name='"+lecturer.getLastname()+"' WHERE id="+lecturer.getId()+";";
 			stmt.executeUpdate(sql);
 			
 		}
@@ -175,6 +180,7 @@ public class LecturerMapper {
 			throw new RuntimeException("Datenbankbankproblem - lm.update: " + e1.getMessage());
 		}
 		
+		db.closeConnection();
 		return lecturer;
 	}
 	
@@ -187,17 +193,18 @@ public class LecturerMapper {
 	 * 			die entstandene Exception wird an die aufrufende Methode weitergereicht
 	 */
 	public Teacher insertIntoDB(Teacher lecturer) throws RuntimeException {
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 						
 		try{
 			// Ausführung des SQL-Querys	
 			Statement stmt = con.createStatement();
-			String sql = "INSERT INTO Lecturer (`user`, `password`, `firstname`, `name`) VALUES ('"+lecturer.getUser()+"', '"+lecturer.getPassword()+"', '"+lecturer.getFirstname()+"', '"+lecturer.getLastname()+"');";
+			String sql = "INSERT INTO Teacher (`user`, `password`, `firstname`, `name`) VALUES ('"+lecturer.getUser()+"', '"+lecturer.getPassword()+"', '"+lecturer.getFirstname()+"', '"+lecturer.getLastname()+"');";
 			stmt.executeUpdate(sql);
 			
 			// Auslesen der nach einfügen eines neuen Lecturers in DB entstandenen "größten" ID
-			sql = "SELECT MAX(ID) AS maxid FROM Lecturer;";
+			sql = "SELECT MAX(ID) AS maxid FROM Teacher;";
 			rs = stmt.executeQuery(sql);
 			
 			// Setzen der ID dem hier aktuellen Semesterverband-Objekt
@@ -210,6 +217,7 @@ public class LecturerMapper {
 			throw new RuntimeException("Datenbankbankproblem: " + e1.getMessage());
 		}
 		
+		db.closeConnection();
 		return lecturer;
 	}
 	
@@ -222,14 +230,15 @@ public class LecturerMapper {
 	 */	
 	public Vector<Teacher> findAll() throws RuntimeException {
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		Vector<Teacher> lecturers = new Vector<Teacher>();
 		
 		try{		
 			// Ausführung des SQL-Querys
 			Statement stmt = con.createStatement();
-			String sql = "SELECT * FROM Lecturer ORDER BY name;";
+			String sql = "SELECT * FROM Teacher ORDER BY name;";
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			while(rs.next()) {
@@ -247,7 +256,7 @@ public class LecturerMapper {
 			throw new RuntimeException("Datenbankbankproblem - lm fa: " + e1.getMessage());		
 		}
 		
-				
+		db.closeConnection();		
 		return lecturers;
 			
 	}
@@ -267,7 +276,8 @@ public class LecturerMapper {
 		 */
 		
 		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		try {
 			Statement stmt = con.createStatement();
 			
@@ -309,14 +319,14 @@ public class LecturerMapper {
 			stmt.executeUpdate(sql);
 			
 			// Löschen Löschen der Lecturer-Entität			
-			sql = "DELETE FROM Lecturer WHERE id = '"+lecturer.getId()+"';";
+			sql = "DELETE FROM Teacher WHERE id = '"+lecturer.getId()+"';";
 			stmt.executeUpdate(sql);
 						
 		}
 		catch (SQLException e1) {
 			throw new RuntimeException("Datenbankbankproblem - lm.delete: " + e1.getMessage());
 		}
-		
+		db.closeConnection();
 	}
 	
 

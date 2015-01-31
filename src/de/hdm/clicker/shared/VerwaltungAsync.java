@@ -55,6 +55,7 @@ public interface VerwaltungAsync {
 	 * ABSCHNITT, Beginn: Services für den Lecturer
 	 * ***********************************************************************************************
 	 */
+	void authenticateUser(String user,String password, AsyncCallback<Integer> callback) throws RuntimeException;
 	
 	void lecturerAuthenticate(String user, String password, AsyncCallback<Boolean> callback) throws RuntimeException;
 	

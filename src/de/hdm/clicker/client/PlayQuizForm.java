@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.clicker.shared.*;
@@ -143,9 +144,10 @@ public class PlayQuizForm extends VerticalPanel {
 	 * 
 	 * @param	verwaltungA - Referenz auf ein Proxy-Objekt. 
 	 */	
-	public PlayQuizForm(VerwaltungAsync verwaltungA) {
+	public PlayQuizForm(VerwaltungAsync verwaltungA, Clicker clicker) {
 
 		this.verwaltung = verwaltungA;
+		this.clicker = clicker;
 
 		img = new ImageDownloadCompositePlayQuiz();
 		//img.setPixelSize(200, 200);
@@ -237,6 +239,8 @@ public class PlayQuizForm extends VerticalPanel {
 			
 		};
 		timer.scheduleRepeating(1000);
+		
+		// RootPanel.get().setWidgetPosition(PlayQuizForm.this, (Window.getClientWidth() / 2) - (PlayQuizForm.this.getOffsetWidth() / 2), clicker.getHeaderPanel().getElement().getAbsoluteBottom() + 5);
 		
 	}
 	

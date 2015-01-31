@@ -234,9 +234,11 @@ public class Clicker implements EntryPoint {
 	/**
 	 * Buttons für die Rollenbestimmung des Users
 	 */
-	Button entryParticipantButton;
-	Button entryLecturerButton;
-	Button entryAdminButton;
+	//Button entryParticipantButton;
+	//Button entryLecturerButton;
+	//Button entryAdminButton;
+	Button loginUserButton;
+
 	
 	/**
 	 * Panel für die Rollenbestimmung
@@ -274,42 +276,52 @@ public class Clicker implements EntryPoint {
 			mainPanel = new ScrollPanel();
 			
 			// Initialisierung der Buttons zur Rollenbestimmung
-			entryParticipantButton = new Button("Teilnehmer");
-			entryLecturerButton = new Button("Lehrende");
-			entryAdminButton = new Button("Admin");
-			addClickHandlerToEAB();
-			addClickHandlerToELB();
-			addClickHandlerToESB();
+			//entryParticipantButton = new Button("Teilnehmer");
+			//entryLecturerButton = new Button("Lehrende");
+			//entryAdminButton = new Button("Admin");
+			loginUserButton = new Button("Anmelden");
+			//loginUserButton.setStyleName("loginUserButton");
+			//addClickHandlerToEAB();
+			//addClickHandlerToELB();
+			//addClickHandlerToESB();
+			addClickHandlerTologinUserButton();
 			
 			// Größe der Buttons definieren
-			entryParticipantButton.setHeight("100px");
-			entryParticipantButton.setWidth("400px");
-			entryLecturerButton.setHeight("100px");
-			entryLecturerButton.setWidth("400px");
-			entryAdminButton.setHeight("100px");
-			entryAdminButton.setWidth("400px");
+//			entryParticipantButton.setHeight("100px");
+//			entryParticipantButton.setWidth("400px");
+//			entryLecturerButton.setHeight("100px");
+//			entryLecturerButton.setWidth("400px");
+//			entryAdminButton.setHeight("100px");
+//			entryAdminButton.setWidth("400px");
+			loginUserButton.setHeight("200px");
+			loginUserButton.setWidth("500px");
 			
 			// Setzen von Style-Attributen zu den EntryButtons
-			entryParticipantButton.getElement().getStyle().setFontSize(15, Unit.PT);
-			entryLecturerButton.getElement().getStyle().setFontSize(15, Unit.PT);
-			entryAdminButton.getElement().getStyle().setFontSize(15, Unit.PT);
+//			entryParticipantButton.getElement().getStyle().setFontSize(15, Unit.PT);
+//			entryLecturerButton.getElement().getStyle().setFontSize(15, Unit.PT);
+//			entryAdminButton.getElement().getStyle().setFontSize(15, Unit.PT);
+//			
+//			entryParticipantButton.getElement().getStyle().setMarginTop(10, Unit.PX);
+//			entryParticipantButton.getElement().getStyle().setMarginBottom(10, Unit.PX);
+//			
+//			entryLecturerButton.getElement().getStyle().setMarginTop(10, Unit.PX);
+//			entryLecturerButton.getElement().getStyle().setMarginBottom(10, Unit.PX);
+//			
+//			entryAdminButton.getElement().getStyle().setMarginTop(10, Unit.PX);
+//			entryAdminButton.getElement().getStyle().setMarginBottom(10, Unit.PX);
 			
-			entryParticipantButton.getElement().getStyle().setMarginTop(10, Unit.PX);
-			entryParticipantButton.getElement().getStyle().setMarginBottom(10, Unit.PX);
-			
-			entryLecturerButton.getElement().getStyle().setMarginTop(10, Unit.PX);
-			entryLecturerButton.getElement().getStyle().setMarginBottom(10, Unit.PX);
-			
-			entryAdminButton.getElement().getStyle().setMarginTop(10, Unit.PX);
-			entryAdminButton.getElement().getStyle().setMarginBottom(10, Unit.PX);
+			loginUserButton.getElement().getStyle().setMarginTop(15, Unit.PX);
+			loginUserButton.getElement().getStyle().setMarginBottom(15, Unit.PX);
+			loginUserButton.getElement().getStyle().setFontSize(25, Unit.PX);
 			
 			/*
 			 * Initialisieren des VP welches die Button zur Rollenbestimmung aufnimmt
 			 */		
 			entryVP = new VerticalPanel();
-			entryVP.add(entryParticipantButton);
-			entryVP.add(entryLecturerButton);
-			entryVP.add(entryAdminButton);
+//			entryVP.add(entryParticipantButton);
+//			entryVP.add(entryLecturerButton);
+//			entryVP.add(entryAdminButton);
+			entryVP.add(loginUserButton);
 			
 			RootPanel.get().add(entryVP);
 			RootPanel.get().setWidgetPosition(entryVP, (Window.getClientWidth() / 2) - (entryVP.getOffsetWidth() / 2), (Window.getClientHeight() / 2) - (entryVP.getOffsetHeight() / 2));
@@ -337,6 +349,8 @@ public class Clicker implements EntryPoint {
 		}
 	}
 	
+	
+
 	public void setChooseQuizFormMobileToMain() {
 		if (afm != null) {
 			afm.removeFromParent();
@@ -620,165 +634,221 @@ public class Clicker implements EntryPoint {
 		return cellTree;
 	}
 	
-	public void addClickHandlerToEAB() {
-				
-		entryAdminButton.addClickHandler(new ClickHandler() {
-
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				entryVP.setVisible(false);
-				
-				authDB = new DialogBox();
-				authDB.setText("Adminauthentifizierung!");
-				authDB.setAnimationEnabled(true);
-				
-				authDBVP = new VerticalPanel();
-				authDBGrid = new Grid(2,3);
-				authDBVP.add(authDBGrid);
-				
-				authDBPWLabel = new Label("Passwort: ");
-				authDBPWTB = new PasswordTextBox();
-				authDBButton = new Button("OK");
-				
-				authDBGrid.setWidget(0, 0, authDBPWLabel);
-				authDBGrid.setWidget(0, 1, authDBPWTB);
-				authDBGrid.setWidget(0, 2, authDBButton);
-				
-				authDBLabel = new Label();
-				authDBVP.add(authDBLabel);
-				
-				authDB.setWidget(authDBVP);
-				
-				authDB.center();
-				authDBPWTB.setFocus(true);
-				
-				addClickHandlerToADBButton();
-				
-				authDBCloseButton = new Button("Close");
-				authDBCloseButton.addClickHandler(new ClickHandler() {
-
+//	public void addClickHandlerToEAB() {
+//				
+//		entryAdminButton.addClickHandler(new ClickHandler() {
+//
+//			
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				entryVP.setVisible(false);
+//				
+//				authDB = new DialogBox();
+//				authDB.setText("Adminauthentifizierung!");
+//				authDB.setAnimationEnabled(true);
+//				
+//				authDBVP = new VerticalPanel();
+//				authDBGrid = new Grid(2,3);
+//				authDBVP.add(authDBGrid);
+//				
+//				authDBPWLabel = new Label("Passwort: ");
+//				authDBPWTB = new PasswordTextBox();
+//				authDBButton = new Button("OK");
+//				
+//				authDBGrid.setWidget(0, 0, authDBPWLabel);
+//				authDBGrid.setWidget(0, 1, authDBPWTB);
+//				authDBGrid.setWidget(0, 2, authDBButton);
+//				
+//				authDBLabel = new Label();
+//				authDBVP.add(authDBLabel);
+//				
+//				authDB.setWidget(authDBVP);
+//				
+//				authDB.center();
+//				authDBPWTB.setFocus(true);
+//				
+//				addClickHandlerToADBButton();
+//				
+//				authDBCloseButton = new Button("Close");
+//				authDBCloseButton.addClickHandler(new ClickHandler() {
+//
+//					@Override
+//					public void onClick(ClickEvent event) {
+//						authDB.hide();
+//						entryVP.setVisible(true);
+//					}
+//					
+//				});
+//				authDBGrid.setWidget(1, 0, authDBCloseButton);
+//			}
+//			
+//		});
+//	}
+	
+//	public void addClickHandlerToADBButton() {
+//		authDBButton.addClickHandler(new ClickHandler() {
+//
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				authDBButton.setEnabled(false);
+//				authDBPWTB.setEnabled(false);
+//				
+//				verwaltung.adminAuthenticate(authDBPWTB.getText(), new AsyncCallback<Boolean>() {
+//
+//					@Override
+//					public void onFailure(Throwable caught) {
+//						authDBPWTB.setText("");
+//						authDBLabel.setText(caught.getMessage());
+//						
+//						authDBButton.setEnabled(true);
+//						authDBPWTB.setEnabled(true);
+//					}
+//
+//					@Override
+//					public void onSuccess(Boolean result) {
+//						authDBPWTB.setText("");
+//						authDB.hide();
+//						
+//						// Initialisieren des DockLayoutPanels
+//						createDockLayoutPanel();
+//						
+//						// Initialisierung eines Objekts vom Typ "TreeViewModel"
+//						atvm = new AdminTreeViewModel(verwaltung);
+//						
+//						// Setzen einer Selbst-Referenz zur "TreeViewModel-Instanz"
+//						atvm.setClicker(Clicker.this);
+//								
+//						// Initialisierung des CellTrees
+//						cellTree = new CellTree(atvm, "Root");
+//						// Anordnen des CellTrees
+//						navi.add(cellTree);
+//						
+//						// Navigationsbereich einblenden
+//						p.setWidgetHidden(navi, false);
+//						
+//						// Clearen des FlowPanels, welches die EntryButtons beihaltet hat
+//						entryVP.clear();
+//						
+//						// DockLayOutPanel dem Body-html-Tag zuweisen
+//						RootPanel.get().add(rlp);
+//						
+//					}
+//					
+//				});
+//				
+//			}
+//			
+//		});
+//	}
+	
+//	public void addClickHandlerToELB() {
+//		entryLecturerButton.addClickHandler(new ClickHandler() {
+//			
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				entryVP.setVisible(false);
+//				
+//				authDB = new DialogBox();
+//				authDB.setText("Lehrender-Authentifizierung!");
+//				authDB.setAnimationEnabled(true);
+//				
+//				authDBVP = new VerticalPanel();
+//				authDBGrid = new Grid(3,3);
+//				authDBVP.add(authDBGrid);
+//				
+//				authDBUserLabel = new Label("User: ");
+//				authDBUserTB = new TextBox();
+//				authDBPWLabel = new Label("Passwort: ");
+//				authDBPWTB = new PasswordTextBox();
+//				authDBButton = new Button("OK");
+//				
+//				authDBGrid.setWidget(0, 0, authDBUserLabel);
+//				authDBGrid.setWidget(0, 1, authDBUserTB);
+//				authDBGrid.setWidget(1, 0, authDBPWLabel);
+//				authDBGrid.setWidget(1, 1, authDBPWTB);
+//				authDBGrid.setWidget(1, 2, authDBButton);
+//				
+//				authDBLabel = new Label();
+//				authDBVP.add(authDBLabel);
+//				
+//				authDB.setWidget(authDBVP);
+//				
+//				authDB.center();
+//				authDBUserTB.setFocus(true);
+//				
+//				addClickHandlerToLDBButton();
+//				
+//				authDBCloseButton = new Button("Close");
+//				authDBCloseButton.addClickHandler(new ClickHandler() {
+//
+//					@Override
+//					public void onClick(ClickEvent event) {
+//						authDB.hide();
+//						entryVP.setVisible(true);
+//					}
+//					
+//				});
+//				authDBGrid.setWidget(2, 0, authDBCloseButton);
+//			}
+//			
+//		});
+//	}
+	
+	private void addClickHandlerTologinUserButton() {
+		
+		loginUserButton.addClickHandler(new ClickHandler() {
+					
 					@Override
 					public void onClick(ClickEvent event) {
-						authDB.hide();
-						entryVP.setVisible(true);
+						entryVP.setVisible(false);
+						
+						authDB = new DialogBox();
+						authDB.setText("Anmeldung");
+						authDB.setAnimationEnabled(true);
+						
+						authDBVP = new VerticalPanel();
+						authDBGrid = new Grid(3,3);
+						authDBVP.add(authDBGrid);
+						
+						authDBUserLabel = new Label("Nutzername: ");
+						authDBUserTB = new TextBox();
+						authDBPWLabel = new Label("Passwort: ");
+						authDBPWTB = new PasswordTextBox();
+						authDBButton = new Button("OK");
+						
+						authDBGrid.setWidget(0, 0, authDBUserLabel);
+						authDBGrid.setWidget(0, 1, authDBUserTB);
+						authDBGrid.setWidget(1, 0, authDBPWLabel);
+						authDBGrid.setWidget(1, 1, authDBPWTB);
+						authDBGrid.setWidget(2, 1, authDBButton);
+						
+						authDBLabel = new Label();
+						authDBVP.add(authDBLabel);
+						
+						authDB.setWidget(authDBVP);
+						
+						authDB.center();
+						authDBUserTB.setFocus(true);
+						
+						addClickHandlerToLDBButton();
+						
+						authDBCloseButton = new Button("Close");
+						authDBCloseButton.addClickHandler(new ClickHandler() {
+
+							@Override
+							public void onClick(ClickEvent event) {
+								authDB.hide();
+								entryVP.setVisible(true);
+							}
+							
+						});
+						authDBGrid.setWidget(2, 0, authDBCloseButton);
 					}
 					
 				});
-				authDBGrid.setWidget(1, 0, authDBCloseButton);
 			}
-			
-		});
-	}
 	
-	public void addClickHandlerToADBButton() {
-		authDBButton.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				authDBButton.setEnabled(false);
-				authDBPWTB.setEnabled(false);
-				
-				verwaltung.adminAuthenticate(authDBPWTB.getText(), new AsyncCallback<Boolean>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						authDBPWTB.setText("");
-						authDBLabel.setText(caught.getMessage());
-						
-						authDBButton.setEnabled(true);
-						authDBPWTB.setEnabled(true);
-					}
-
-					@Override
-					public void onSuccess(Boolean result) {
-						authDBPWTB.setText("");
-						authDB.hide();
-						
-						// Initialisieren des DockLayoutPanels
-						createDockLayoutPanel();
-						
-						// Initialisierung eines Objekts vom Typ "TreeViewModel"
-						atvm = new AdminTreeViewModel(verwaltung);
-						
-						// Setzen einer Selbst-Referenz zur "TreeViewModel-Instanz"
-						atvm.setClicker(Clicker.this);
-								
-						// Initialisierung des CellTrees
-						cellTree = new CellTree(atvm, "Root");
-						// Anordnen des CellTrees
-						navi.add(cellTree);
-						
-						// Navigationsbereich einblenden
-						p.setWidgetHidden(navi, false);
-						
-						// Clearen des FlowPanels, welches die EntryButtons beihaltet hat
-						entryVP.clear();
-						
-						// DockLayOutPanel dem Body-html-Tag zuweisen
-						RootPanel.get().add(rlp);
-						
-					}
-					
-				});
-				
-			}
-			
-		});
-	}
 	
-	public void addClickHandlerToELB() {
-		entryLecturerButton.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				entryVP.setVisible(false);
-				
-				authDB = new DialogBox();
-				authDB.setText("Lehrender-Authentifizierung!");
-				authDB.setAnimationEnabled(true);
-				
-				authDBVP = new VerticalPanel();
-				authDBGrid = new Grid(3,3);
-				authDBVP.add(authDBGrid);
-				
-				authDBUserLabel = new Label("User: ");
-				authDBUserTB = new TextBox();
-				authDBPWLabel = new Label("Passwort: ");
-				authDBPWTB = new PasswordTextBox();
-				authDBButton = new Button("OK");
-				
-				authDBGrid.setWidget(0, 0, authDBUserLabel);
-				authDBGrid.setWidget(0, 1, authDBUserTB);
-				authDBGrid.setWidget(1, 0, authDBPWLabel);
-				authDBGrid.setWidget(1, 1, authDBPWTB);
-				authDBGrid.setWidget(1, 2, authDBButton);
-				
-				authDBLabel = new Label();
-				authDBVP.add(authDBLabel);
-				
-				authDB.setWidget(authDBVP);
-				
-				authDB.center();
-				authDBUserTB.setFocus(true);
-				
-				addClickHandlerToLDBButton();
-				
-				authDBCloseButton = new Button("Close");
-				authDBCloseButton.addClickHandler(new ClickHandler() {
-
-					@Override
-					public void onClick(ClickEvent event) {
-						authDB.hide();
-						entryVP.setVisible(true);
-					}
-					
-				});
-				authDBGrid.setWidget(2, 0, authDBCloseButton);
-			}
-			
-		});
-	}
 	
 	public void addClickHandlerToLDBButton() {
 		authDBButton.addClickHandler(new ClickHandler() {
@@ -789,157 +859,256 @@ public class Clicker implements EntryPoint {
 				authDBButton.setEnabled(false);
 				authDBPWTB.setEnabled(false);
 				
-				verwaltung.lecturerAuthenticate(authDBUserTB.getText(), authDBPWTB.getText(), new AsyncCallback<Boolean>() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						authDBUserTB.setText("");
-						authDBPWTB.setText("");
-						authDBLabel.setText(caught.getMessage());
-						
-						authDBUserTB.setEnabled(true);
-						authDBButton.setEnabled(true);
-						authDBPWTB.setEnabled(true);
-					}
-
-					@Override
-					public void onSuccess(Boolean result) {
-						authDBUserTB.setText("");
-						authDBPWTB.setText("");
-						authDB.hide();
-						
-						// Initialisieren des DockLayoutPanels
-						createDockLayoutPanel();
-						
-						// Initialisierung eines Objekts vom Typ "TreeViewModel"
-						ltvm = new LecturerTreeViewModel(verwaltung);
-						
-						// Setzen einer Selbst-Referenz zur "TreeViewModel-Instanz"
-						ltvm.setClicker(Clicker.this);
-								
-						// Initialisierung des CellTrees
-						cellTree = new CellTree(ltvm, "Root");
-						
-						// Anordnen des CellTrees
-						navi.add(cellTree);
-						
-						// Navigationsbereich einblenden
-						p.setWidgetHidden(navi, false);
-						
-						// Clearen des FlowPanels, welches die EntryButtons beihaltet hat
-						entryVP.clear();
-						
-						// DockLayOutPanel dem Body-html-Tag zuweisen
-						RootPanel.get().add(rlp);
-					}
-					
-				});
+//				verwaltung.lecturerAuthenticate(authDBUserTB.getText(), authDBPWTB.getText(), new AsyncCallback<Boolean>() {
+//
+//					@Override
+//					public void onFailure(Throwable caught) {
+//						authDBUserTB.setText("");
+//						authDBPWTB.setText("");
+//						authDBLabel.setText(caught.getMessage());
+//						
+//						authDBUserTB.setEnabled(true);
+//						authDBButton.setEnabled(true);
+//						authDBPWTB.setEnabled(true);
+//					}
+//
+//					@Override
+//					public void onSuccess(Boolean result) {
+//						authDBUserTB.setText("");
+//						authDBPWTB.setText("");
+//						authDB.hide();
+//						
+//						// Initialisieren des DockLayoutPanels
+//						createDockLayoutPanel();
+//						
+//						// Initialisierung eines Objekts vom Typ "TreeViewModel"
+//						ltvm = new LecturerTreeViewModel(verwaltung);
+//						
+//						// Setzen einer Selbst-Referenz zur "TreeViewModel-Instanz"
+//						ltvm.setClicker(Clicker.this);
+//								
+//						// Initialisierung des CellTrees
+//						cellTree = new CellTree(ltvm, "Root");
+//						
+//						// Anordnen des CellTrees
+//						navi.add(cellTree);
+//						
+//						// Navigationsbereich einblenden
+//						p.setWidgetHidden(navi, false);
+//						
+//						// Clearen des FlowPanels, welches die EntryButtons beihaltet hat
+//						entryVP.clear();
+//						
+//						// DockLayOutPanel dem Body-html-Tag zuweisen
+//						RootPanel.get().add(rlp);
+//					}
+//					
+//				});
 				
-			}
+				
 			
-		});
-	}
 	
-	public void addClickHandlerToESB() {
-		entryParticipantButton.addClickHandler(new ClickHandler() {
-						
-			public void onClick(ClickEvent event) {
-				entryVP.setVisible(false);
-				
-				authDB = new DialogBox();
-				authDB.setText("Teilnehmer-Authentifizierung!");
-				authDB.setAnimationEnabled(true);
-				
-				authDBVP = new VerticalPanel();
-				authDBGrid = new Grid(3,3);
-				authDBVP.add(authDBGrid);
-				
-				authDBUserLabel = new Label("HdM-Kürzel: ");
-				authDBUserTB = new TextBox();
-				authDBPWLabel = new Label("Passwort: ");
-				authDBPWTB = new PasswordTextBox();
-				authDBButton = new Button("OK");
-				
-				authDBGrid.setWidget(0, 0, authDBUserLabel);
-				authDBGrid.setWidget(0, 1, authDBUserTB);
-				authDBGrid.setWidget(1, 0, authDBPWLabel);
-				authDBGrid.setWidget(1, 1, authDBPWTB);
-				authDBGrid.setWidget(1, 2, authDBButton);
-				
-				authDBLabel = new Label();
-				authDBVP.add(authDBLabel);
-				
-				authDB.setWidget(authDBVP);
-				
-				authDB.center();
-				authDBUserTB.setFocus(true);
-				
-				addClickHandlerToSDBButton();
-				
-				authDBCloseButton = new Button("Close");
-				authDBCloseButton.addClickHandler(new ClickHandler() {
-
-					@Override
-					public void onClick(ClickEvent event) {
-						authDB.hide();
-						entryVP.setVisible(true);
-					}
-					
-				});
-				authDBGrid.setWidget(2, 0, authDBCloseButton);
-			}
-			
-		});
-	}
-	
-	public void addClickHandlerToSDBButton() {
-		authDBButton.addClickHandler(new ClickHandler() {
+		
+		verwaltung.authenticateUser(authDBUserTB.getText(), authDBPWTB.getText(), new AsyncCallback<Integer>() {
 
 			@Override
-			public void onClick(ClickEvent event) {
-				authDBUserTB.setEnabled(false);
-				authDBButton.setEnabled(false);
-				authDBPWTB.setEnabled(false);
-				
-				/*
-				 * Negative Authentifizierung
-				 */
-				/*
+			public void onFailure(Throwable caught) {
 				authDBUserTB.setText("");
 				authDBPWTB.setText("");
-				authDBLabel.setText("Anmeldung nicht erfolgreich");
-				
+				authDBLabel.setText(caught.getMessage());
 				authDBUserTB.setEnabled(true);
 				authDBButton.setEnabled(true);
 				authDBPWTB.setEnabled(true);
-				*/
 				
-				verwaltung.signInParticipant("lz006", new AsyncCallback<Void>() {
+			}
 
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert(caught.getMessage());
-						
-					}
-
-					@Override
-					public void onSuccess(Void result) {
-						authDBUserTB.setText("");
-						authDBPWTB.setText("");
-						authDB.hide();
-						
-						setChooseFormToMain();
-						
-					}
+			@Override
+			public void onSuccess(Integer result) {
+				authDBUserTB.setText("");
+				authDBPWTB.setText("");
+				authDB.hide();
+				
+				// Initialisieren des DockLayoutPanels
+				createDockLayoutPanel();
+				
+				switch(result){
+				case 0: 
+					authDBUserTB.setText("");
+					authDBPWTB.setText("");
+					authDBLabel.setText("Anmeldung nicht erfolgreich");
 					
-				});
+					authDBUserTB.setEnabled(true);
+					authDBButton.setEnabled(true);
+					authDBPWTB.setEnabled(true);
+					break;
+				case 1: setChooseFormToMain();
+				break;
+				case 2:
+					// Initialisierung eines Objekts vom Typ "TreeViewModel"
+					ltvm = new LecturerTreeViewModel(verwaltung);
+					
+					// Setzen einer Selbst-Referenz zur "TreeViewModel-Instanz"
+					ltvm.setClicker(Clicker.this);
+							
+					// Initialisierung des CellTrees
+					cellTree = new CellTree(ltvm, "Root");
+					
+					// Anordnen des CellTrees
+					navi.add(cellTree);
+					
+					// Navigationsbereich einblenden
+					p.setWidgetHidden(navi, false);
+					
+					// Clearen des FlowPanels, welches die EntryButtons beihaltet hat
+					entryVP.clear();
+					
+					// DockLayOutPanel dem Body-html-Tag zuweisen
+					RootPanel.get().add(rlp);
+					break;
+					default:break;
+					
+					
+				}
+//				}
+//				// Initialisierung eines Objekts vom Typ "TreeViewModel"
+//				ltvm = new LecturerTreeViewModel(verwaltung);
+//				
+//				// Setzen einer Selbst-Referenz zur "TreeViewModel-Instanz"
+//				ltvm.setClicker(Clicker.this);
+//						
+//				// Initialisierung des CellTrees
+//				cellTree = new CellTree(ltvm, "Root");
+//				
+//				// Anordnen des CellTrees
+//				navi.add(cellTree);
+//				
+//				// Navigationsbereich einblenden
+//				p.setWidgetHidden(navi, false);
+//				
+//				// Clearen des FlowPanels, welches die EntryButtons beihaltet hat
+//				entryVP.clear();
+//				
+//				// DockLayOutPanel dem Body-html-Tag zuweisen
+//				RootPanel.get().add(rlp);
 				
-				
-								
 			}
 			
-		});
+			}
+				);
+		
+		
+		
+		}
+		
+		}
+				);
+		
 	}
+	
+//	public void addClickHandlerToESB() {
+//		entryParticipantButton.addClickHandler(new ClickHandler() {
+//						
+//			public void onClick(ClickEvent event) {
+//				entryVP.setVisible(false);
+//				
+//				authDB = new DialogBox();
+//				authDB.setText("Teilnehmer-Authentifizierung!");
+//				authDB.setAnimationEnabled(true);
+//				
+//				authDBVP = new VerticalPanel();
+//				authDBGrid = new Grid(3,3);
+//				authDBVP.add(authDBGrid);
+//				
+//				authDBUserLabel = new Label("HdM-Kürzel: ");
+//				authDBUserTB = new TextBox();
+//				authDBPWLabel = new Label("Passwort: ");
+//				authDBPWTB = new PasswordTextBox();
+//				authDBButton = new Button("OK");
+//				
+//				authDBGrid.setWidget(0, 0, authDBUserLabel);
+//				authDBGrid.setWidget(0, 1, authDBUserTB);
+//				authDBGrid.setWidget(1, 0, authDBPWLabel);
+//				authDBGrid.setWidget(1, 1, authDBPWTB);
+//				authDBGrid.setWidget(1, 2, authDBButton);
+//				
+//				authDBLabel = new Label();
+//				authDBVP.add(authDBLabel);
+//				
+//				authDB.setWidget(authDBVP);
+//				
+//				authDB.center();
+//				authDBUserTB.setFocus(true);
+//				
+//				addClickHandlerToSDBButton();
+//				
+//				authDBCloseButton = new Button("Close");
+//				authDBCloseButton.addClickHandler(new ClickHandler() {
+//
+//					@Override
+//					public void onClick(ClickEvent event) {
+//						authDB.hide();
+//						entryVP.setVisible(true);
+//					}
+//					
+//				});
+//				authDBGrid.setWidget(2, 0, authDBCloseButton);
+//			}
+//			
+//		});
+//	}
+	
+//	public void addClickHandlerToSDBButton() {
+//		authDBButton.addClickHandler(new ClickHandler() {
+//
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				authDBUserTB.setEnabled(false);
+//				authDBButton.setEnabled(false);
+//				authDBPWTB.setEnabled(false);
+//				
+//				/*
+//				 * Negative Authentifizierung
+//				 */
+//				/*
+//				authDBUserTB.setText("");
+//				authDBPWTB.setText("");
+//				authDBLabel.setText("Anmeldung nicht erfolgreich");
+//				
+//				authDBUserTB.setEnabled(true);
+//				authDBButton.setEnabled(true);
+//				authDBPWTB.setEnabled(true);
+//				*/
+//				if hhh
+	
+//				verwaltung.signInParticipant("lz006", new AsyncCallback<Void>() {
+//
+//					@Override
+//					public void onFailure(Throwable caught) {
+//						Window.alert(caught.getMessage());
+//						
+//					}
+//
+//					@Override
+//					public void onSuccess(Void result) {
+//						authDBUserTB.setText("");
+//						authDBPWTB.setText("");
+//						authDB.hide();
+//						
+//						setChooseFormToMain();
+//						
+//					}
+//					
+//				});
+//				
+//				
+//								
+//			}
+//			
+//		});
+//	}
+	
+	
+	
 	
 	public void createDockLayoutPanel() {
 		// Initialisierung eines DockLayoutPanels

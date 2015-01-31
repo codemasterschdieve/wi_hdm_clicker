@@ -39,7 +39,7 @@ public class PieChart extends GChart {
 	     String[] pieTypes = {"Richtig", "Falsch"};
 	     String[] pieColors = {"green", "red"};
 	       
-	     this.setChartSize(300, 200);
+	     this.setChartSize(500, 300);
 	     setChartTitle("<h3>"+sb.toString()+"</h3>");
 	     this.setLegendVisible(false);
 	     getXAxis().setAxisVisible(false);

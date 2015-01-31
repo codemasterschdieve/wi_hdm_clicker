@@ -14,7 +14,7 @@ import de.hdm.clicker.shared.bo.*;
  * in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
  * 
  * @see QuizMapper
- * @see LecturerMapper
+ * @see TeacherMapper
  * @see QuestionMapper
  * @see ResultsMapper
  * 
@@ -85,7 +85,8 @@ public class CategoryMapper {
 		ids.append(keys.elementAt(keys.size()-1));			
 			
 		//Einholen einer DB-Verbindung		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 		Vector<Category> categories = new Vector<Category>();
 		try{
@@ -107,6 +108,7 @@ public class CategoryMapper {
 			throw new RuntimeException("Datenbankbankproblem - cm fbk: " + e1.getMessage());				
 		}
 		
+		db.closeConnection();
 		return categories;
 	}
 	
@@ -119,7 +121,8 @@ public class CategoryMapper {
 	 * 			die entstandene Exception wird an die aufrufende Methode weitergereicht
 	 */
 	public Category update(Category category) throws RuntimeException {
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		// Aktualisierung der Dozent-Entität in der DB		
 		try{
@@ -133,6 +136,7 @@ public class CategoryMapper {
 			throw new RuntimeException("Datenbankbankproblem - cm.update: " + e1.getMessage());
 		}
 		
+		db.closeConnection();
 		return category;
 	}
 	
@@ -145,7 +149,8 @@ public class CategoryMapper {
 	 * 			die entstandene Exception wird an die aufrufende Methode weitergereicht
 	 */
 	public Category insertIntoDB(Category category) throws RuntimeException {
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		ResultSet rs;
 						
 		try{
@@ -168,6 +173,7 @@ public class CategoryMapper {
 			throw new RuntimeException("Datenbankbankproblem - cm.insert: " + e1.getMessage());
 		}
 		
+		db.closeConnection();
 		return category;
 	}
 	
@@ -180,7 +186,8 @@ public class CategoryMapper {
 	 */	
 	public Vector<Category> findAll() throws RuntimeException {
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		Vector<Category> categories = new Vector<Category>();
 		
@@ -203,7 +210,7 @@ public class CategoryMapper {
 			throw new RuntimeException("Datenbankbankproblem - cm fa: " + e1.getMessage());		
 		}
 		
-				
+		db.closeConnection();		
 		return categories;
 			
 	}
@@ -218,7 +225,8 @@ public class CategoryMapper {
 	 */	
 	public Vector<Category> findAllByLecturer(Teacher lecturer) throws RuntimeException {
 				
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		Vector<Category> categories = new Vector<Category>();
 		
@@ -241,7 +249,7 @@ public class CategoryMapper {
 			throw new RuntimeException("Datenbankbankproblem - cm fa: " + e1.getMessage());		
 		}
 		
-				
+		db.closeConnection();		
 		return categories;
 			
 	}
@@ -260,7 +268,8 @@ public class CategoryMapper {
 		 */
 		
 		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		try {
 			Statement stmt = con.createStatement();
 			
@@ -274,7 +283,7 @@ public class CategoryMapper {
 		catch (SQLException e1) {
 			throw new RuntimeException("Datenbankbankproblem - cm.delete: " + e1.getMessage());
 		}
-		
+		db.closeConnection();
 	}
 	
 	/**
@@ -291,7 +300,8 @@ public class CategoryMapper {
 		 */
 		
 		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		try {
 			Statement stmt = con.createStatement();
 			
@@ -305,7 +315,7 @@ public class CategoryMapper {
 		catch (SQLException e1) {
 			throw new RuntimeException("Datenbankbankproblem - cm.delete: " + e1.getMessage());
 		}
-		
+		db.closeConnection();
 	}
 
 }

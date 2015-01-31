@@ -62,6 +62,7 @@ public interface Verwaltung extends RemoteService {
 	 * ***********************************************************************************************
 	 */
 	
+	public int authenticateUser(String user,String password) throws RuntimeException;
 	
 	public boolean lecturerAuthenticate(String user, String password) throws RuntimeException;
 	

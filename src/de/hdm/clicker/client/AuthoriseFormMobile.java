@@ -37,7 +37,7 @@ public class AuthoriseFormMobile extends FlexPanel {
 		this.verwaltung = verwaltungA;
 		
 		kuerzelLBL = new MTextBox();
-		kuerzelLBL.setText("HdM-Kürzel:");
+		kuerzelLBL.setText("HdM-Kuerzel:");
 		kuerzelLBL.setEnabled(false);
 		kuerzelTB = new MTextBox();
 		pwLBL = new MTextBox();
@@ -73,7 +73,7 @@ public class AuthoriseFormMobile extends FlexPanel {
 				//ad.show();
 				//LDAP-Authorisierung
 				
-				verwaltung.signInParticipant("lz006", new AsyncCallback<Void>() {
+				verwaltung.signInParticipant("ss305", new AsyncCallback<Void>() {
 
 					@Override
 					public void onFailure(Throwable caught) {

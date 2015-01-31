@@ -71,7 +71,8 @@ public class ImageUploadImpl extends HttpServlet {
 		Question ques2Update = questionMapper.findByKey(vi).elementAt(0);
 		questionMapper.deleteImage(ques2Update);
 		
-		Connection con = DBConnection.connection();
+		DBConnection db = new DBConnection();
+		Connection con = db.connection();
 		
 		try{
 			// Ausf�hren des SQL-Statements
@@ -90,6 +91,7 @@ public class ImageUploadImpl extends HttpServlet {
 		catch (SQLException e1) {
 			throw new RuntimeException("Datenbankbankproblem: " + e1.getMessage());
 		}
+	//	db.closeConnection();
 						
 	}
 	

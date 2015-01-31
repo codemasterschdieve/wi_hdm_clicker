@@ -143,7 +143,7 @@ public class LecturerTreeViewModel implements TreeViewModel {
 				 *  Bei Klick auf ein "String-Objekt" wird die entsprechende Formklasse 
 				 *  in den Arbeitsbereich GUI geladen
 				 */
-				else if (selection instanceof String && (String) selection == "Eigenes Profil") {
+				else if (selection instanceof String && (String) selection == "Profil") {
 					
 					verwaltung.getSignedLecturer(new AsyncCallback<Teacher>() {
 
@@ -162,12 +162,12 @@ public class LecturerTreeViewModel implements TreeViewModel {
 					});
 				}
 				
-				else if (selection instanceof String && (String) selection == "Quiz-Steuerung") {
+				else if (selection instanceof String && (String) selection == "Quiz Administration") {
 					
 					setSelectedQuizControlForm();
 				}
 				
-				else if (selection instanceof String && (String) selection == "Quiz-Reporting") {
+				else if (selection instanceof String && (String) selection == "Quiz Ausgabe") {
 					
 					setSelectedReportForm();
 				}
@@ -319,9 +319,9 @@ public class LecturerTreeViewModel implements TreeViewModel {
 
 			dummyDataProvider = new ListDataProvider<String>();
 
-			String cockpit = "Cockpit";
-			String editor = "Editor";
-			String report = "Report";
+			String cockpit = "Uebersicht-Konsole";
+			String editor = "Bearbeitungs-Konsole";
+			String report = "Ausgabe-Konsole";
 
 			dummyDataProvider.getList().add(cockpit);
 			dummyDataProvider.getList().add(editor);
@@ -331,12 +331,12 @@ public class LecturerTreeViewModel implements TreeViewModel {
 		}
 		
 		// "Cockpit" enthält "Quiz-Steuerung" und "Eigenes Profil" als Kind-Elemente		
-		if (value instanceof String && (String) value == "Cockpit") {
+		if (value instanceof String && (String) value == "Uebersicht-Konsole") {
 
 			dummyDataProvider = new ListDataProvider<String>();
 
-			String quizSteuerung = "Quiz-Steuerung";
-			String eigenesProfil = "Eigenes Profil";
+			String quizSteuerung = "Quiz Administration";
+			String eigenesProfil = "Profil";
 
 			dummyDataProvider.getList().add(quizSteuerung);
 			dummyDataProvider.getList().add(eigenesProfil);
@@ -345,11 +345,11 @@ public class LecturerTreeViewModel implements TreeViewModel {
 		}
 		
 		// "Report enthält nur Quiz-Reporting als Kind-Elemente		
-		if (value instanceof String && (String) value == "Report") {
+		if (value instanceof String && (String) value == "Ausgabe-Konsole") {
 
 			dummyDataProvider = new ListDataProvider<String>();
 
-			String quizReporting = "Quiz-Reporting";
+			String quizReporting = "Quiz Ausgabe";
 
 			dummyDataProvider.getList().add(quizReporting);
 
@@ -357,7 +357,7 @@ public class LecturerTreeViewModel implements TreeViewModel {
 		}
 		
 		// "Editor" enthält "Anlegen" und "Verwalten" als Kind-Elemente		
-		if (value instanceof String && (String) value == "Editor") {
+		if (value instanceof String && (String) value == "Bearbeitungs-Konsole") {
 
 			dummyDataProvider = new ListDataProvider<String>();
 
@@ -441,7 +441,7 @@ public class LecturerTreeViewModel implements TreeViewModel {
 		}
 		
 		// "Report" enthält... als Kind-Elemente
-		if (value instanceof String && (String) value == "Report") {
+		if (value instanceof String && (String) value == "Ausgabe-Konsole") {
 
 			//return new DefaultNodeInfo<String>(dummyDataProvider, new DummyCell(), selectionModel, null);
 		}
@@ -639,13 +639,13 @@ public class LecturerTreeViewModel implements TreeViewModel {
 	 */
 	public boolean isLeaf(Object value) {
 
-		if (value instanceof String && (String) value == "Quiz-Steuerung") {
+		if (value instanceof String && (String) value == "Quiz Administration") {
 			return true;
 		}
-		if (value instanceof String && (String) value == "Quiz-Reporting") {
+		if (value instanceof String && (String) value == "Quiz Ausgabe") {
 			return true;
 		}
-		if (value instanceof String && (String) value == "Eigenes Profil") {
+		if (value instanceof String && (String) value == "Profil") {
 			return true;
 		}
 		if (value instanceof String && (String) value == "Kategorie") {

@@ -37,7 +37,7 @@ public class ReportForm extends VerticalPanel {
 	/**
 	 * ListBox und Container zur Auswahl des Startdatums
 	 */
-	Label startdateLabel = new Label("Startdatum: ");
+	Label startdateLabel = new Label("Anfangsdatum: ");
 	ListBox startdateListBox = new ListBox();
 	Vector<Integer> startdatumVectorLB = null;
 	
@@ -51,12 +51,12 @@ public class ReportForm extends VerticalPanel {
 	/**
 	 * Button zur Pie-Chart-Anzeige
 	 */
-	Button piechartButton = new Button("Diagramme generieren");
+	// Button piechartButton = new Button("Diagramme generieren");
 	
 	/**
 	 * Button für CSV-Export
 	 */
-	Button csvButton = new Button("CSV-Export");
+	Button csvButton = new Button("CSV Datei exportieren");
 	
 	/**
 	 * Grid zur Anordnung der Widgets
@@ -101,8 +101,8 @@ public class ReportForm extends VerticalPanel {
 		auswahlGrid.setWidget(0, 1, startdateListBox);
 		auswahlGrid.setWidget(1, 0, quizLabel);
 		auswahlGrid.setWidget(1, 1, quizBox);
-		auswahlGrid.setWidget(2, 0, piechartButton);
-		auswahlGrid.setWidget(2, 1, csvButton);
+	//	 auswahlGrid.setWidget(2, 0, piechartButton);
+		auswahlGrid.setWidget(2, 0, csvButton);
 		
 		this.add(auswahlGrid);
 		
@@ -121,16 +121,16 @@ public class ReportForm extends VerticalPanel {
 			
 		});
 		
-		piechartButton.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				piechartButton.setEnabled(false);
-				generatePieCharts();
-				
-			}
-			
-		});
+//		piechartButton.addClickHandler(new ClickHandler() {
+//
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				piechartButton.setEnabled(false);
+//				generatePieCharts();
+////				
+////			}
+//			
+//		});
 		
 		csvButton.addClickHandler(new ClickHandler() {
 
@@ -220,43 +220,43 @@ public class ReportForm extends VerticalPanel {
 		}
 	}
 	
-	public void generatePieCharts() {
-		piechartFlexTable.removeAllRows();
-		
-		verwaltung.auslesenChartInfoByQuiz(quizVectorLB.elementAt(quizBox.getSelectedIndex()), new AsyncCallback<Vector<InfoGraph>>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
-				piechartButton.setEnabled(true);
-				
-			}
-
-			@Override
-			public void onSuccess(Vector<InfoGraph> result) {
-				
-				piechartVector = new Vector<PieChart>();
-				
-				if (result != null && result.size() != 0) {
-					
-					int row = 0;
-					int col = 0;
-					for (int i = 0; i < result.size(); i++) {
-						piechartVector.add(new PieChart(result.elementAt(i)));
-						piechartFlexTable.setWidget(row, col, piechartVector.elementAt(i));
-						piechartVector.elementAt(i).update();
-						col++;
-						if(col >= 3) {
-							col = 0;
-							row++;
-						}
-					}
-				}
-				piechartButton.setEnabled(true);
-			}
-			
-		});
-	}
+//	public void generatePieCharts() {
+//		piechartFlexTable.removeAllRows();
+//		
+//		verwaltung.auslesenChartInfoByQuiz(quizVectorLB.elementAt(quizBox.getSelectedIndex()), new AsyncCallback<Vector<InfoGraph>>() {
+//
+////			@Override
+////			public void onFailure(Throwable caught) {
+////				Window.alert(caught.getMessage());
+////			//	piechartButton.setEnabled(true);
+////				
+////			}
+//
+//			@Override
+//			public void onSuccess(Vector<InfoGraph> result) {
+//				
+//				piechartVector = new Vector<PieChart>();
+//				
+//				if (result != null && result.size() != 0) {
+//					
+//					int row = 0;
+//					int col = 0;
+//					for (int i = 0; i < result.size(); i++) {
+//						piechartVector.add(new PieChart(result.elementAt(i)));
+//						piechartFlexTable.setWidget(row, col, piechartVector.elementAt(i));
+//						piechartVector.elementAt(i).update();
+//						col++;
+//						if(col >= 3) {
+//							col = 0;
+//							row++;
+//						}
+//					}
+//				}
+//				piechartButton.setEnabled(true);
+//			}
+//			
+//		});
+//	}
 	
 	public void loadCSVData() {
 		verwaltung.auslesenCSVDataByQuiz(quizVectorLB.elementAt(quizBox.getSelectedIndex()), new AsyncCallback<String>() {
