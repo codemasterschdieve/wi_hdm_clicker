@@ -23,7 +23,7 @@ import de.hdm.clicker.shared.bo.*;
 
 /**
  * Diese Klasse stellt die zur Auswahl aktiver Quizze notwendige
- * grafische Benutzeroberfläche bereit
+ * grafische BenutzeroberflÃ¤che bereit
  * 
  * @author Roth, Zimmermann, Zanella
  * @version 1.0
@@ -32,7 +32,7 @@ import de.hdm.clicker.shared.bo.*;
 public class ChooseQuizForm extends VerticalPanel {
 
 	/**
-	 * Referenz auf das Proxy-Objekt um mit dem Server kommunizieren zu können
+	 * Referenz auf das Proxy-Objekt um mit dem Server kommunizieren zu kÃ¶nnen
 	 */
 	VerwaltungAsync verwaltung = null;
 	
@@ -52,7 +52,7 @@ public class ChooseQuizForm extends VerticalPanel {
 	Vector<Quiz> quizVector = null;
 	
 	/**
-	 * Container welche alle Labels und Zähler beinhalten die einen Quiz-Countdown darstellen
+	 * Container welche alle Labels und ZÃ¤hler beinhalten die einen Quiz-Countdown darstellen
 	 */
 	Vector<Label> labelVector = null;
 	Vector<Integer> integerVector = null;
@@ -70,12 +70,12 @@ public class ChooseQuizForm extends VerticalPanel {
 	int today = 0;
 	
 	/**
-	 * Container für alle Labels und Zähler für den Start-Button-Countdown
+	 * Container fÃ¼r alle Labels und ZÃ¤hler fÃ¼r den Start-Button-Countdown
 	 */
 	Vector<Label> labelButtonVector = new Vector<Label>();
 	
 	/**
-	 * Counter für die automatische Aktualisierung
+	 * Counter fÃ¼r die automatische Aktualisierung
 	 */
 	long timeCount = 0;
 	
@@ -94,7 +94,7 @@ public class ChooseQuizForm extends VerticalPanel {
 	Button authDBCloseButton = null;
 	
 	/**
-	 * Pointer auf das gwählte Quiz
+	 * Pointer auf das gwÃ¤hlte Quiz
 	 */
 	int quizPos;
 	
@@ -105,7 +105,7 @@ public class ChooseQuizForm extends VerticalPanel {
 	
 	/**
 	 * Komstruktor der alle notwendigen Widgets initialisiert und anordnet,
-	 * so dass das Objekt für weitere Konfigurationen bereit ist
+	 * so dass das Objekt fÃ¼r weitere Konfigurationen bereit ist
 	 * 
 	 * @param	verwaltungA - Referenz auf ein Proxy-Objekt. 
 	 */	
@@ -170,7 +170,7 @@ public class ChooseQuizForm extends VerticalPanel {
 	}
 	
 	/**
-	 * Methode um den FlexTable mit den aktiven Quizzen zu befüllen
+	 * Methode um den FlexTable mit den aktiven Quizzen zu befÃ¼llen
 	 */
 	public void quizzeAnzeigen() {
 		quizFlexTable.removeAllRows();
@@ -178,7 +178,7 @@ public class ChooseQuizForm extends VerticalPanel {
 		
 		if ((quizVector != null)	&& (quizVector.size() > 0)) {
 			
-			// Für jede Question der Category...
+			// FÃ¼r jede Question der Category...
 			for (Quiz q : quizVector) {
 				
 				//...wird im FlexTable ein Eintrag gesetzt und...
